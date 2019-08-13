@@ -28,6 +28,7 @@ public class GrouplistFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_grouplist, container,false);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
