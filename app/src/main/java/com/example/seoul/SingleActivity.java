@@ -9,10 +9,9 @@ import android.widget.ImageButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.seoul.Group.GrouplistFragment;
 import com.example.seoul.Single.CrewrecomFragment;
 import com.example.seoul.Single.MyrecordFragment;
-import com.example.seoul.Single.RunFragment;
+import com.example.seoul.Single.Run.RunFragment;
 import com.example.seoul.Single.RunguideFragment;
 import com.google.android.material.tabs.TabLayout;
 

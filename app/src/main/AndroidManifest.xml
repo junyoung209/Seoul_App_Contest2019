@@ -13,12 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar.NoActionBar">
-        <activity android:name=".Single.DatauploadActivity"></activity>
+        <activity android:name=".Single.Run.DatauploadActivity"></activity>
         <activity android:name=".MypageActivity" />
         <activity android:name=".GroupActivity" />
         <activity android:name=".ApiActivity" />
         <activity android:name=".SingleActivity" />
-        <activity android:name=".Single.SingleWorkoutActivity" />
+        <activity android:name=".Single.Run.SingleWorkoutActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

@@ -1,4 +1,4 @@
-package com.example.seoul.Single;
+package com.example.seoul.Single.Run;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,8 +11,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.seoul.R;
-import com.example.seoul.RegisterActivity;
-import com.example.seoul.RegisterRequest;
 
 import org.json.JSONObject;
 

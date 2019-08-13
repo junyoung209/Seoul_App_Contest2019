@@ -1,4 +1,4 @@
-package com.example.seoul.Single;
+package com.example.seoul.Single.Run;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
