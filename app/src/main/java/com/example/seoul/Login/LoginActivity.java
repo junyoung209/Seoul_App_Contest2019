@@ -1,4 +1,4 @@
-package com.example.seoul;
+package com.example.seoul.Login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.seoul.R;
+import com.example.seoul.SingleActivity;
 
 import org.json.JSONObject;
 
@@ -68,7 +70,6 @@ public class LoginActivity extends AppCompatActivity {
                 userPassword = passwordText.getText().toString();
                 Response.Listener<String> responseLisner = new Response.Listener<String>(){
                     @Override
-
                     public void onResponse(String response) {
                         try{
                             JSONObject jsonResponse = new JSONObject(response);

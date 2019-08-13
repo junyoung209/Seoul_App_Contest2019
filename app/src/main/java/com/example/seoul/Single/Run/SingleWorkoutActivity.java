@@ -90,7 +90,7 @@ public class SingleWorkoutActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             int sec = (msg.arg1 / 100) % 60;
             int min = (msg.arg1 / 100) / 60;
-            int hour = (msg.arg1 / 100) / 360;
+            int hour = (msg.arg1 / 100) / 3600;
             //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
 
             @SuppressLint("DefaultLocale") String result = String.format("%d:%02d:%02d", hour, min, sec);

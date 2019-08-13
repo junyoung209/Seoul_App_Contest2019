@@ -19,8 +19,8 @@
         <activity android:name=".ApiActivity" />
         <activity android:name=".SingleActivity" />
         <activity android:name=".Single.Run.SingleWorkoutActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".Login.RegisterActivity" />
+        <activity android:name=".Login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
