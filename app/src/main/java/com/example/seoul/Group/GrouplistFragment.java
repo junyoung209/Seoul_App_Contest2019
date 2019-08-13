@@ -24,8 +24,9 @@ public class GrouplistFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        int resId = R.layout.fragment_grouplist;
-        View view = inflater.inflate(resId, container,false);
+
+        View view = inflater.inflate(R.layout.fragment_grouplist, container,false);
+
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener(){
             @Override

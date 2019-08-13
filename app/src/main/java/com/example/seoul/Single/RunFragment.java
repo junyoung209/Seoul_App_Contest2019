@@ -23,7 +23,7 @@ public class RunFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_run,container, false);
-        int resId = R.layout.fragment_run;
+
 
         bt_workout = (ImageButton)view.findViewById(R.id.workout_btn);
 

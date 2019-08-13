@@ -26,10 +26,10 @@ public class CrewrecomFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View v=inflater.inflate(R.layout.fragment_crewrecom, container, false);
-        textView = (TextView)v.findViewById(R.id.t_view);
+        View view=inflater.inflate(R.layout.fragment_crewrecom, container, false);
+        textView = (TextView)view.findViewById(R.id.t_view);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_layout);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -38,7 +38,7 @@ public class CrewrecomFragment extends Fragment {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
-        return v;
+        return view;
     }
 
     @Override

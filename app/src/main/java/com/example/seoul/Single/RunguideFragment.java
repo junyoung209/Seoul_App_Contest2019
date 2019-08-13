@@ -18,8 +18,11 @@ public class RunguideFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        int resId = R.layout.fragment_runguide;
-        return inflater.inflate(resId, null);
+
+        View view = inflater.inflate(R.layout.fragment_runguide,container, false);
+
+
+        return view;
     }
 
     @Override

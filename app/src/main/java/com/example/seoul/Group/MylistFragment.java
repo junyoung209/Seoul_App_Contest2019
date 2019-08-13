@@ -29,10 +29,12 @@ public class MylistFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View v=inflater.inflate(R.layout.fragment_mylist, container, false);
-        textView = (TextView)v.findViewById(R.id.textview12);
+        View view=inflater.inflate(R.layout.fragment_mylist, container, false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_layout);
+
+        textView = (TextView)view.findViewById(R.id.textview12);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -48,7 +50,7 @@ public class MylistFragment extends Fragment {
         for(int i=0; i<100; i++)
             text += i + "\n";
         textView.setText(text);
-        return v;
+        return view;
     }
 
     @Override
