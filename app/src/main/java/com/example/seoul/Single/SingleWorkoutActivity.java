@@ -14,10 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.seoul.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class SingleWorkoutActivity extends AppCompatActivity {
     private Button mStartBtn, mStopBtn;
     private TextView mTimeTextView;
     private String userID;
+    private String dateToday;
 
 
     private Thread timeThread1 = null;
@@ -66,10 +70,11 @@ public class SingleWorkoutActivity extends AppCompatActivity {
         mStopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Log.i("log",getToDay());
                 Intent intent = new Intent(SingleWorkoutActivity.this, DatauploadActivity.class);
                 intent.putExtra("userID",userID);
-                intent.putExtra("runTime",mTimeTextView.getText()); //액티비티 전환하면서 id넘겨
+                intent.putExtra("runTime",mTimeTextView.getText());
+                intent.putExtra("dateToday",getToDay());//액티비티 전환하면서 id넘겨
                 SingleWorkoutActivity.this.startActivity(intent);
                 finish();
             }
@@ -114,6 +119,13 @@ public class SingleWorkoutActivity extends AppCompatActivity {
             }
         }
     }
+
+    public static String getToDay(){
+
+        SimpleDateFormat date=new SimpleDateFormat("yyyy-MM-dd");
+        return date.format(new Date());
+    }
+
 
 
 }

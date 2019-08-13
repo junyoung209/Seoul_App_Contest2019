@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 public class DatauploadActivity extends AppCompatActivity {
 
-    private String userID,run_time;
+    private String userID,run_time,dateToday;
 
     private Button Upload_btn,Cancel_btn;
 
@@ -28,7 +28,7 @@ public class DatauploadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dataupload);
         userID= getIntent().getStringExtra("userID");
         run_time= getIntent().getStringExtra("runTime");
-
+        dateToday=getIntent().getStringExtra("dateToday");
 
         Upload_btn=(Button)findViewById(R.id.upload_btn);
 
@@ -55,7 +55,8 @@ public class DatauploadActivity extends AppCompatActivity {
 
                     }
                 };
-                UploadRequest uploadRequest=new UploadRequest(userID,run_time,responseListener);
+                Log.i("log",dateToday);
+                UploadRequest uploadRequest=new UploadRequest(userID,run_time,dateToday,responseListener);
                 RequestQueue queue= Volley.newRequestQueue(DatauploadActivity.this);
                 queue.add(uploadRequest);
             }
