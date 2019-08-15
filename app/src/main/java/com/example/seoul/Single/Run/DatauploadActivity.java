@@ -44,6 +44,7 @@ public class DatauploadActivity extends AppCompatActivity {
 
                             if(success)
                             {
+
                                 finish();
                             }
                         }
