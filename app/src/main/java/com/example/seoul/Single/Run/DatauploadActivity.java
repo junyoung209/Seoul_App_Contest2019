@@ -45,7 +45,7 @@ public class DatauploadActivity extends AppCompatActivity {
         Cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "기록을 취소하였습니다.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "기록을 취소했습니다.",Toast.LENGTH_SHORT).show();
                 customDialog.dismiss();
                 finish();
             }
