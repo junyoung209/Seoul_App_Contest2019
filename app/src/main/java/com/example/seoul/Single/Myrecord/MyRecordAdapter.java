@@ -1,6 +1,8 @@
 package com.example.seoul.Single.Myrecord;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +54,7 @@ public class MyRecordAdapter extends RecyclerView.Adapter<MyRecordAdapter.record
         return this.items.size();
     }
 
-    public class recordViewHolder extends RecyclerView.ViewHolder {
+    public class recordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         CardView cv;
         TextView index;
@@ -61,6 +63,7 @@ public class MyRecordAdapter extends RecyclerView.Adapter<MyRecordAdapter.record
 
         public recordViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             cv = (CardView)itemView.findViewById(R.id.myrecord_Cardview);
             index = (TextView)itemView.findViewById(R.id.myrecord_index);
             time = (TextView)itemView.findViewById(R.id.myrecord_time);
@@ -68,5 +71,14 @@ public class MyRecordAdapter extends RecyclerView.Adapter<MyRecordAdapter.record
         }
 
 
+        @Override
+        public void onClick(View view) {
+            Log.i("logposition",Integer.toString(getPosition()));
+            Log.i("logpos", items.get(getPosition()).getRunTime());
+//            Intent intent = new Intent(view.getContext() , DetailActivity.class);
+//            view.getContext().startActivity(intent);
+
+
+        }
     }
 }
