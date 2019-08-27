@@ -19,9 +19,9 @@ import com.example.seoul.R;
 
 public class MylistFragment extends Fragment {
 
-    String text = "";
-    TextView textView;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private String text = "";
+    private TextView textView;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
 
     @Override

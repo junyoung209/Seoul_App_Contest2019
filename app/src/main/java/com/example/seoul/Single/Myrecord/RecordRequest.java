@@ -9,7 +9,6 @@ import java.util.Map;
 
 public class RecordRequest  extends StringRequest {
 
-
     final static private String URL = "http://39.115.93.52:8111/test.php";
     private Map<String, String> parameters;
 

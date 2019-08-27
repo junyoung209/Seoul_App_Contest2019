@@ -1,23 +1,26 @@
 package com.example.seoul.Group;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
+
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.seoul.CrewcreateActivity;
 import com.example.seoul.R;
+import com.example.seoul.Single.Run.SingleWorkoutActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -31,7 +34,10 @@ public class GrouplistFragment extends Fragment {
     private LinearLayoutManager llm;
     private List<Integer> count;
     private int i = 0;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
+
+    @SuppressLint("WrongConstant")
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -39,11 +45,28 @@ public class GrouplistFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_grouplist, container,false);
         rv = (RecyclerView) view.findViewById(R.id.recyclerView);
         llm = new LinearLayoutManager(getActivity());
-        llm.setOrientation(LinearLayoutManager.HORIZONTAL);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+
         count = new ArrayList<>();
 
         rv.setHasFixedSize(true);
         rv.setLayoutManager(llm);
+
+
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                i ++;
+                count.add(i);
+                RvAdapter adapter = new RvAdapter(getActivity(), count, i);
+                rv.setAdapter(adapter);
+                Log.d("Count", count + "");
+                adapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener(){
@@ -55,19 +78,8 @@ public class GrouplistFragment extends Fragment {
         });
         return view;
     }
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.main_btn_add : {
-                i ++;
-                count.add(i);
-                RvAdapter adapter = new RvAdapter(getActivity(), count, i);
-                rv.setAdapter(adapter);
-                Log.d("Count", count + "");
-                adapter.notifyDataSetChanged();
-                break;
-            }
-        }
-    }
+
+
 
 
     @Override
