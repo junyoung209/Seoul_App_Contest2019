@@ -19,7 +19,8 @@
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:background="#FFFFFF"
-            android:src="@drawable/stop_watch" />
+
+            android:src="@drawable/ic_timer_black_24dp" />
 
     </LinearLayout>
 

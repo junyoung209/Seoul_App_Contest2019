@@ -3,13 +3,12 @@ package com.example.seoul.Single.Myrecord;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -22,13 +21,13 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 
 
-import com.example.seoul.Group.RvAdapter;
 import com.example.seoul.R;
+import com.example.seoul.Single.Run.CustomDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MyrecordFragment extends Fragment {
@@ -36,16 +35,20 @@ public class MyrecordFragment extends Fragment {
 
     private String userID;
     private ArrayList<Myrecord> myrecord=new ArrayList<>();
-    private String a="";
     private ProgressDialog pdialog;
-    private TextView textView;
+
+
+    private Boolean modify_Flag=false;
 
     private RecyclerView rv;
     private LinearLayoutManager llm;
-    private List<Integer> count;
-    private int i = 0;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private SwipeRefreshLayout refresh;
     private MyRecordAdapter adapter;
+    private FloatingActionButton modify;
+
+    private Button Delete_btn,Cancel_btn;
+    private CustomDialog customDialog;
 
 
     @SuppressLint("WrongConstant")
@@ -59,6 +62,8 @@ public class MyrecordFragment extends Fragment {
         pdialog.setMessage("Loading");
         pdialog.show();
 
+
+
         Bundle bundle=this.getArguments();
         if(bundle!=null)
         {
@@ -70,16 +75,14 @@ public class MyrecordFragment extends Fragment {
         llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
 
-        count = new ArrayList<>();
-
         rv.setHasFixedSize(true);
         rv.setLayoutManager(llm);
 
 
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.myrecord_SwipeLayout);
+        refresh = (SwipeRefreshLayout) view.findViewById(R.id.myrecord_SwipeLayout);
 
-        getData(new VolleyCallBack() {
+        getData(new RecordCallBack() {
             @Override
             public void onSuccess(ArrayList<Myrecord> result) {
                 myrecord=result;
@@ -89,23 +92,34 @@ public class MyrecordFragment extends Fragment {
                 adapter.notifyDataSetChanged();
 
                 pdialog.dismiss();
-                Log.i("log",Integer.toString(myrecord.size()));
+
             }
         });
         Log.i("log",Integer.toString(myrecord.size()));
 
 
-
-
-
-
+//        modify = (FloatingActionButton) view.findViewById(R.id.myrecord_Modify);
+//        //+버튼 누르면 편집모드로 바뀜
+//        modify.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (modify_Flag == true) {
+//                    modify.setImageResource(R.drawable.ic_add_24dp);
+//                    modify_Flag = false;
+//                } else {
+//                    Toast.makeText(getActivity(), "편집모드", Toast.LENGTH_SHORT).show();
+//                    modify_Flag = true;
+//                    modify.setImageResource(R.drawable.ic_remove_white_24dp);
+//                }
+//            }
+//        });
 
 
         return view;
     }
 
 
-    public void getData(final VolleyCallBack callback)
+    public void getData(final RecordCallBack callback)
     {
 
         RequestQueue queue=Volley.newRequestQueue(getActivity().getApplicationContext());
@@ -113,7 +127,7 @@ public class MyrecordFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 try {
-                    Log.i("log",response);
+
                     JSONObject jsonObject=new JSONObject(response);
                     boolean success=jsonObject.getBoolean("success");
                     if(success)
@@ -149,6 +163,16 @@ public class MyrecordFragment extends Fragment {
         return;
     }
 
+    public void refreshData(){
+        getData(new RecordCallBack() {
+            @Override
+            public void onSuccess(ArrayList<Myrecord> result) {
+                myrecord=result;
+                adapter.notifyDataSetChanged();
+
+            }
+        });
+    }
 
 
     @Override
@@ -185,31 +209,27 @@ public class MyrecordFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Log.i("log","Myrecord:onstart");
+        refreshData();
+
+
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
 
 
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
-                getData(new VolleyCallBack() {
-                    @Override
-                    public void onSuccess(ArrayList<Myrecord> result) {
-                        myrecord=result;
-                        adapter.notifyDataSetChanged();
-
-                        Log.i("log",Integer.toString(myrecord.size()));
-                    }
-                });
-
-                mSwipeRefreshLayout.setRefreshing(false);
+                refreshData();
+                refresh.setRefreshing(false);
             }
         });
-        Log.i("log","Myrecord:onresume");
+
+
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,13 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.seoul.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MyRecordAdapter extends RecyclerView.Adapter<MyRecordAdapter.recordViewHolder> {
 
     private Context context;
     private ArrayList<Myrecord> items;
-    private int i;
+
 
     public MyRecordAdapter(Context context, ArrayList<Myrecord> items) {
         this.context = context;
@@ -41,7 +41,13 @@ public class MyRecordAdapter extends RecyclerView.Adapter<MyRecordAdapter.record
         holder.index.setText(Integer.toString(items.get(position).getIdx()));
         holder.time.setText(items.get(position).getRunTime());
         holder.date.setText(items.get(position).getDate());
+
     }
+
+    public int getPosition(){
+        return getPosition();
+    }
+
 
 
 
@@ -70,13 +76,25 @@ public class MyRecordAdapter extends RecyclerView.Adapter<MyRecordAdapter.record
             date = (TextView)itemView.findViewById(R.id.myrecord_Date);
         }
 
+//
+//        public void setRadio(View itemView)
+//        {
+//            myrecord_radio.setVisibility(itemView.);
+//        }
+
 
         @Override
         public void onClick(View view) {
             Log.i("logposition",Integer.toString(getPosition()));
             Log.i("logpos", items.get(getPosition()).getRunTime());
-//            Intent intent = new Intent(view.getContext() , DetailActivity.class);
-//            view.getContext().startActivity(intent);
+
+//            myrecord_radio.setVisibility(view.VISIBLE);
+
+            Intent intent = new Intent(view.getContext() , MyrecordResult.class);
+            intent.putExtra("idx",index.getText());
+            intent.putExtra("time",time.getText());
+            intent.putExtra("data",date.getText());
+            view.getContext().startActivity(intent);
 
 
         }
