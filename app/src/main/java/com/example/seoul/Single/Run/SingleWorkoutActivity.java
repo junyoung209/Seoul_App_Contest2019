@@ -41,10 +41,12 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
@@ -58,13 +60,13 @@ public class SingleWorkoutActivity extends AppCompatActivity
     private TextView mTimeTextView,mtemp;
     private String userID;
     private String dateToday;
-
+    private int i=0;
     private GoogleMap mGoogleMap = null;
     private Marker currentMarker = null;
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int UPDATE_INTERVAL_MS = 100;  // 0.1초
-    private static final int FASTEST_UPDATE_INTERVAL_MS = 50; // 0.05초
+    private static final int UPDATE_INTERVAL_MS = 2500;  // 0.1초
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 2500; // 0.05초
 
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     boolean needRequest = false;
@@ -84,7 +86,11 @@ public class SingleWorkoutActivity extends AppCompatActivity
     private Location location;
     private LatLng startLatLng = new LatLng(0, 0);
     private LatLng endLatLng = new LatLng(0, 0);
-    private boolean walkState = false;
+    private boolean runState = false;
+
+
+    private LocationManager locationManager;
+    private LocationListener locationListener;
 
     private View mLayout;
 
@@ -114,17 +120,17 @@ public class SingleWorkoutActivity extends AppCompatActivity
             public void onClick(View v) {
                 //v.setVisibility(View.GONE);
                 trueWalkState();
-                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                LocationListener locationListener = new LocationListener() {
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                locationListener = new LocationListener() {
                     @Override
                     public void onLocationChanged(Location location) {
                         double latitude = location.getLatitude();
                         double longitude = location.getLongitude();
                         Log.i("log","IN ON LOCATION CHANGE, lat=" + latitude + ", lon=" + longitude);
                         mCurrentLocatiion = location;
-                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocatiion.getLatitude(),mCurrentLocatiion.getLongitude()),18));
-                        int i=0;
-                        if(walkState){
+                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocatiion.getLatitude(),mCurrentLocatiion.getLongitude()),15));
+
+                        if(runState){
                             temp.add(startLatLng);
                             mtemp.setText(temp.get(i++).toString());
                             endLatLng = new LatLng(latitude, longitude);
@@ -158,9 +164,11 @@ public class SingleWorkoutActivity extends AppCompatActivity
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,1000,1,locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2500, 1, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,2500,1,locationListener);
 
+
+                //스탑워치
                 if(timeThread1==null)
                 {
                     mStartBtn.setText("PAUSE");
@@ -184,8 +192,13 @@ public class SingleWorkoutActivity extends AppCompatActivity
         mStopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                falseWalkState();
+                runState=false;
+                temp.add(startLatLng);
+                locationManager.removeUpdates(locationListener);
+                Toast.makeText(getApplicationContext(), "운동을 종료합니다.", Toast.LENGTH_SHORT).show();
                 Log.i("log",getToDay());
+
+
                 Intent intent = new Intent(SingleWorkoutActivity.this, DatauploadActivity.class);
                 intent.putExtra("userID",userID);
                 intent.putExtra("runTime",mTimeTextView.getText());
@@ -221,10 +234,10 @@ public class SingleWorkoutActivity extends AppCompatActivity
         public void handleMessage(Message msg) {
             int sec = (msg.arg1 / 100) % 60;
             int min = (msg.arg1 / 100) / 60;
-            int hour = (msg.arg1 / 100) / 360;
+            int hour = (msg.arg1 / 100) / 3600;
             //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
 
-            @SuppressLint("DefaultLocale") String result = String.format("%d:%02d:%02d", hour, min, sec);
+            @SuppressLint("DefaultLocale") String result = String.format("%02d:%02d:%02d", hour, min, sec);
             mTimeTextView.setText(result);
         }
     };
@@ -478,7 +491,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
         builder.create().show();
     }
 
-    @Override
+    @Override//사용자가 GPS 활성 시켰는지 검사
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -505,30 +518,27 @@ public class SingleWorkoutActivity extends AppCompatActivity
 
 
     private void trueWalkState(){
-        if(!walkState){
+        if(!runState){
             Toast.makeText(getApplicationContext(), "운동을 시작합니다.", Toast.LENGTH_SHORT).show();
-            walkState = true;
+
+            runState = true;
             startLatLng = new LatLng(mCurrentLocatiion.getLatitude(), mCurrentLocatiion.getLongitude());
+            CircleOptions circleOptions=new CircleOptions().center(startLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(18);
+            mGoogleMap.addCircle(circleOptions);
         }else{
+            runState=false;
             Toast.makeText(getApplicationContext(), "운동을 일시중지합니다.", Toast.LENGTH_SHORT).show();
-        }
-    }
 
-    private void falseWalkState(){
-        if(walkState){
-            Toast.makeText(getApplicationContext(), "운동을 종료합니다.", Toast.LENGTH_SHORT).show();
-            walkState = false;
-
-        }else{
-            Toast.makeText(getApplicationContext(), "운동시작 버튼을 누르십시오.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void drawPath(){
 
-        PolylineOptions options = new PolylineOptions().add(startLatLng).add(endLatLng).width(5).color(Color.BLACK).geodesic(true);
+        PolylineOptions options = new PolylineOptions().add(startLatLng).add(endLatLng).width(20).color(Color.RED).geodesic(true);
         mGoogleMap.addPolyline(options);
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, 18));
+        CircleOptions circleOptions=new CircleOptions().center(endLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(18);
+        mGoogleMap.addCircle(circleOptions);
+//        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, 17));
     }
 
     LocationCallback locationCallback = new LocationCallback() {
@@ -562,6 +572,12 @@ public class SingleWorkoutActivity extends AppCompatActivity
         }
 
     };
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
 
     private void startLocationUpdates() {
 

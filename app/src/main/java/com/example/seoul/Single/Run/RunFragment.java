@@ -132,6 +132,7 @@ public class RunFragment extends Fragment
 
     @Override
     public void onSaveInstanceState(Bundle outState){
+        Log.i("log","onSaveInstanceState");
         super.onSaveInstanceState(outState);
         mapView.onSaveInstanceState(outState);
     }
@@ -175,6 +176,7 @@ public class RunFragment extends Fragment
 
     @Override
     public void onCreate(Bundle savedInstanceState){
+        Log.i("log","onCreate");
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
@@ -191,9 +193,9 @@ public class RunFragment extends Fragment
 //        setCurrentLocation(null, "위치정보 가져올 수 없음", "위치 퍼미션과 GPS 활성 여부 확인");
 
         //나침반이 나타나도록 설정
-        googleMap.getUiSettings().setCompassEnabled(true);
+        googleMap.getUiSettings().setCompassEnabled(false);
         // 매끄럽게 이동함
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(17));
 
         //  API 23 이상이면 런타임 퍼미션 처리 필요
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -230,6 +232,7 @@ public class RunFragment extends Fragment
     }
 
     public void setCurrentLocation(Location location, String markerTitle, String markerSnippet) {
+        Log.i("log","setCurrentLocation");
         if ( currentMarker != null ) currentMarker.remove();
 
         if ( location != null) {
@@ -253,6 +256,7 @@ public class RunFragment extends Fragment
 
 
     public boolean checkLocationServicesStatus() {
+        Log.i("log","checkLocationServicesStatus");
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
@@ -261,6 +265,7 @@ public class RunFragment extends Fragment
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        Log.i("log","onConnected");
         if ( !checkLocationServicesStatus()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("위치 서비스 비활성화");
@@ -309,6 +314,7 @@ public class RunFragment extends Fragment
 
     @Override
     public void onConnectionSuspended(int cause) {
+        Log.i("log","onConnectionSuspended");
         if ( cause ==  CAUSE_NETWORK_LOST )
             Log.e(TAG, "onConnectionSuspended(): Google Play services " +
                     "connection lost.  Cause: network lost.");
@@ -341,6 +347,7 @@ public class RunFragment extends Fragment
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
+        Log.i("log","onViewCreated");
 
         mapView = (MapView)view.findViewById(R.id.mapview);
         if(mapView != null){
