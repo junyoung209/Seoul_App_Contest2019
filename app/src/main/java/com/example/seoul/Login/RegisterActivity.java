@@ -1,4 +1,4 @@
-package com.example.seoul;
+package com.example.seoul.Login;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.seoul.R;
 
 import org.json.JSONObject;
 

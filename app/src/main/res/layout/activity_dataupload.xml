@@ -24,9 +24,9 @@
             />
 
         <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
             <Button
                 android:layout_width="80dp"
@@ -34,9 +34,8 @@
                 android:textSize="15dp"
                 android:text="Upload"
                 android:layout_alignParentLeft="true"
-                android:background="@color/colorPrimary"
+                android:background="#D9D9D9"
                 android:id="@+id/upload_btn"
-                android:textColor="#ffffff"
                 />
 
             <Button
@@ -45,9 +44,9 @@
                 android:textSize="15dp"
                 android:text="Cancel"
                 android:layout_alignParentRight="true"
-                android:background="@color/colorPrimary"
+                android:background="#D9D9D9"
                 android:id="@+id/cancel_btn"
-                android:textColor="#ffffff"
+
                 />
 
 
