@@ -1,71 +1,83 @@
 package com.example.seoul.Single.Run;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
-public class Runrecord {
+public class Runrecord implements Serializable {
 
     String userID;
-    int idx;
-    ArrayList<LatLng> cord;
+    String runTime;
+    String dateToday;
+    String runDistance;
+    String runVelocity;
 
-    public Runrecord(String userID, int idx, ArrayList<LatLng> cord)
+
+
+    public Runrecord(String userID, String runTime,String runDistance,String runVelocity,String dateToday)
     {
-//        cord=new ArrayList<>();
+
         this.userID=userID;
-        this.idx=idx;
-        this.cord=cord;
+        this.runTime=runTime;
+        this.runDistance=runDistance;
+        this.runVelocity=runVelocity;
+        this.dateToday=dateToday;
     }
 
+    public Runrecord() {
+
+    }
 
     public String getUserID() {
         return userID;
     }
 
-    public int getIdx() {
-        return idx;
+    public String getRunTime() {
+        return runTime;
     }
 
-    public ArrayList<LatLng> getCord() {
-        return cord;
+    public String getDateToday() {
+        return dateToday;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public String getRunDistance() {
+        return runDistance;
     }
 
-    public void setIdx(int idx) {
-        this.idx = idx;
+    public String getRunVelocity() {
+        return runVelocity;
     }
+    //    public JSONArray recordToJson()  //위치 좌표 json타입으로 변환
+//    {
+//        JSONArray jsonArray = new JSONArray();
+//        try {
+//
+//            for(int i=0;i<cord.size();i++)
+//            {
+//                JSONObject jsonObject=new JSONObject();
+//                jsonObject.put("userID",userID);
+//                jsonObject.put("idx",idx);
+//                jsonObject.put("lat",cord.get(i).latitude);
+//                jsonObject.put("log",cord.get(i).longitude);
+//                jsonArray.put(jsonObject);
+//            }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return jsonArray;
+//    }
 
-    public void setCord(ArrayList<LatLng> cord) {
-        this.cord = cord;
-    }
-
-    public JSONArray recordToJson()  //위치 좌표 json타입으로 변환
-    {
-        JSONArray jsonArray = new JSONArray();
-        try {
-
-            for(int i=0;i<cord.size();i++)
-            {
-                JSONObject jsonObject=new JSONObject();
-                jsonObject.put("userID",userID);
-                jsonObject.put("idx",idx);
-                jsonObject.put("lat",cord.get(i).latitude);
-                jsonObject.put("log",cord.get(i).longitude);
-                jsonArray.put(jsonObject);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return jsonArray;
-    }
 
 
 }

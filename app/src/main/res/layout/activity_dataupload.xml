@@ -15,9 +15,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Result"
+            android:text="@string/result"
             android:layout_gravity="center"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:textStyle="bold"
             android:textColor="#000000"
             android:layout_marginTop="5dp"
@@ -31,28 +31,115 @@
             <Button
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:textSize="15dp"
-                android:text="Upload"
+                android:textSize="15sp"
+                android:text="@string/upload"
                 android:layout_alignParentLeft="true"
                 android:background="#D9D9D9"
                 android:id="@+id/upload_btn"
-                />
+                android:layout_alignParentStart="true" />
 
             <Button
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:textSize="15dp"
-                android:text="Cancel"
+                android:textSize="15sp"
+                android:text="@string/cancel"
                 android:layout_alignParentRight="true"
                 android:background="#D9D9D9"
                 android:id="@+id/cancel_btn"
 
-                />
+                android:layout_alignParentEnd="true" />
 
 
 
         </RelativeLayout>
 
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/upload_runresult">
+                <fragment
+                    android:id="@+id/upload_map"
+                    class="com.google.android.gms.maps.MapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:context="." />
+
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:background="#D9D9D9"
+                android:layout_above="@+id/upload_lineartime"
+                android:id="@+id/upload_runresult">
+
+                <TextView
+                    android:id="@+id/upload_runTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="00:00:00"
+                    android:textSize="20dp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
+
+
+                <TextView
+                    android:id="@+id/upload_runDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:textSize="20dp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                android:background="#D9D9D9"
+                android:id="@+id/upload_lineartime"
+                >
+
+                <TextView
+                    android:id="@+id/upload_runDistance"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="0km"
+                    android:textSize="20dp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/upload_runVelocity"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="0.00km/h"
+                    android:textSize="20dp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:layout_weight="1" />
+
+
+
+
+            </LinearLayout>
+        </RelativeLayout>
 
 
 

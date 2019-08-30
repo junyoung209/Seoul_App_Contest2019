@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -56,10 +57,21 @@ import java.util.List;
 
 public class SingleWorkoutActivity extends AppCompatActivity
         implements OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback{
+
     private Button mStartBtn, mStopBtn;
-    private TextView mTimeTextView,mtemp;
+    private TextView mTimeTextView,mtemp,mdist,mDistanceTextView,mVelocityTextView;
+
     private String userID;
     private String dateToday;
+    private String runTime;
+    private String runDistance;
+    private String runVelocity;
+    private ArrayList<LatLng> runCordlist =new ArrayList<>();
+
+
+    private static double distance;
+
+
     private int i=0;
     private GoogleMap mGoogleMap = null;
     private Marker currentMarker = null;
@@ -77,7 +89,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
     // 앱을 실행하기 위해 필요한 퍼미션을 정의합니다.
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};  // 외부 저장소
 
-    private ArrayList<LatLng> temp =new ArrayList<>();
+
     Location mCurrentLocatiion;
     LatLng currentPosition;
 
@@ -107,13 +119,20 @@ public class SingleWorkoutActivity extends AppCompatActivity
 
 
 
-        userID= getIntent().getStringExtra("userID");
 
+        userID= getIntent().getStringExtra("userID");
+        distance=0;
      //   Log.i("log",userID);
         mStartBtn = (Button)findViewById(R.id.start_btn);
         mStopBtn = (Button)findViewById(R.id.stop_btn);
-        mTimeTextView = (TextView)findViewById(R.id.timeView);
+        mTimeTextView = (TextView)findViewById(R.id.workout_timeView);
+        mDistanceTextView=(TextView)findViewById(R.id.workout_distanceView);
+        mVelocityTextView=(TextView)findViewById(R.id.workout_velocityView);
+
+
+        //확인용
         mtemp=(TextView)findViewById(R.id.textView3);
+        mdist=(TextView)findViewById(R.id.textView4);
 
         mStartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,11 +150,31 @@ public class SingleWorkoutActivity extends AppCompatActivity
                         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocatiion.getLatitude(),mCurrentLocatiion.getLongitude()),15));
 
                         if(runState){
-                            temp.add(startLatLng);
-                            mtemp.setText(temp.get(i++).toString());
+
+
+
                             endLatLng = new LatLng(latitude, longitude);
-                            drawPath();
-                            startLatLng = new LatLng(latitude, longitude);
+
+                            //거리계산 m단위
+                            Location location1=new Location("start");
+                            Location location2=new Location("end");
+                            location1.setLatitude(startLatLng.latitude);
+                            location1.setLongitude(startLatLng.longitude);
+                            location2.setLatitude(endLatLng.latitude);
+                            location2.setLongitude(endLatLng.longitude);
+
+
+                            //계산값이 8m보다 크면 path그려
+                            if(location1.distanceTo(location2)>=8)
+                            {
+                                distance+=location1.distanceTo(location2);
+                                runCordlist.add(startLatLng);
+                                mtemp.setText(runCordlist.get(i++).toString());
+                                mdist.setText(Double.toString(distance));
+                                drawPath();
+                                startLatLng = new LatLng(latitude, longitude);
+                            }
+
                         }
                     }
 
@@ -193,16 +232,30 @@ public class SingleWorkoutActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 runState=false;
-                temp.add(startLatLng);
+                runCordlist.add(startLatLng);
                 locationManager.removeUpdates(locationListener);
                 Toast.makeText(getApplicationContext(), "운동을 종료합니다.", Toast.LENGTH_SHORT).show();
-                Log.i("log",getToDay());
+                Log.i("log",Integer.toString(runCordlist.size()));
 
+
+
+                //액티비티 종료하면서 데이터 넘기자
+
+
+                dateToday=getToDay();
+                runTime=(String)mTimeTextView.getText();
+                runDistance=(String)mDistanceTextView.getText();
+                runVelocity=(String)mVelocityTextView.getText();
+
+                Runrecord runRecord=new Runrecord(userID,runTime,runDistance,runVelocity,dateToday);
 
                 Intent intent = new Intent(SingleWorkoutActivity.this, DatauploadActivity.class);
-                intent.putExtra("userID",userID);
-                intent.putExtra("runTime",mTimeTextView.getText());
-                intent.putExtra("dateToday",getToDay());//액티비티 전환하면서 id넘겨
+
+
+                //좌표랑 데이터 넘김
+                intent.putExtra("runCord",runCordlist);
+                intent.putExtra("runRecord",runRecord);
+
                 SingleWorkoutActivity.this.startActivity(intent);
                 finish();
             }
@@ -227,22 +280,12 @@ public class SingleWorkoutActivity extends AppCompatActivity
         mapFragment.getMapAsync(this);
 
     }
-
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            int sec = (msg.arg1 / 100) % 60;
-            int min = (msg.arg1 / 100) / 60;
-            int hour = (msg.arg1 / 100) / 3600;
-            //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
-
-            @SuppressLint("DefaultLocale") String result = String.format("%02d:%02d:%02d", hour, min, sec);
-            mTimeTextView.setText(result);
-        }
-    };
-
     public class timeThread implements Runnable {
+
+        double dist=distance;
+        int i=0;
+
+
         @Override
         public void run() {
             int i = 0;
@@ -263,6 +306,30 @@ public class SingleWorkoutActivity extends AppCompatActivity
             }
         }
     }
+
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            int sec = (msg.arg1 / 100) % 60;
+            int min = (msg.arg1 / 100) / 60;
+            int hour = (msg.arg1 / 100) / 3600;
+            //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
+
+
+
+
+            @SuppressLint("DefaultLocale") String result = String.format("%02d:%02d:%02d", hour, min, sec);
+            mTimeTextView.setText(result);
+            @SuppressLint("DefaultLocale") String distance=String.format("%.4f",SingleWorkoutActivity.distance/1000);
+            mDistanceTextView.setText(distance+" Km");
+            @SuppressLint("DefaultLocale") String veleocity=String.format("%.4f",(double)SingleWorkoutActivity.distance/1000/(sec*3600));
+            mVelocityTextView.setText(veleocity+" Km/h");
+
+        }
+    };
+
+
 
     public static String getToDay(){
 
@@ -523,8 +590,9 @@ public class SingleWorkoutActivity extends AppCompatActivity
 
             runState = true;
             startLatLng = new LatLng(mCurrentLocatiion.getLatitude(), mCurrentLocatiion.getLongitude());
-            CircleOptions circleOptions=new CircleOptions().center(startLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(18);
+            CircleOptions circleOptions=new CircleOptions().center(startLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(24);
             mGoogleMap.addCircle(circleOptions);
+
         }else{
             runState=false;
             Toast.makeText(getApplicationContext(), "운동을 일시중지합니다.", Toast.LENGTH_SHORT).show();
@@ -536,7 +604,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
 
         PolylineOptions options = new PolylineOptions().add(startLatLng).add(endLatLng).width(20).color(Color.RED).geodesic(true);
         mGoogleMap.addPolyline(options);
-        CircleOptions circleOptions=new CircleOptions().center(endLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(18);
+        CircleOptions circleOptions=new CircleOptions().center(endLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(24);
         mGoogleMap.addCircle(circleOptions);
 //        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, 17));
     }

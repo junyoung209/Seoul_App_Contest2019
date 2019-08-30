@@ -21,9 +21,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="WorkOut"
+                android:text="@string/workout"
                 android:layout_gravity="center"
-                android:textSize="30dp"
+                android:textSize="30sp"
                 android:textStyle="bold"
                 android:textColor="#000000"
                 android:layout_marginTop="5dp"
@@ -42,13 +42,35 @@
                 android:id="@+id/workout_top">
 
                 <TextView
-                    android:id="@+id/timeView"
+                    android:id="@+id/workout_timeView"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="0:00:00"
-                    android:textSize="35dp"
-                    android:textStyle="bold" />
+                    android:text="00:00:00"
+                    android:textSize="20dp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/workout_distanceView"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="0km"
+                    android:textSize="20dp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/workout_velocityView"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:gravity="center"
+                    android:text="0.00km/h"
+                    android:textSize="20dp"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:layout_weight="1" />
 
             </LinearLayout>
 
@@ -64,16 +86,25 @@
                     android:layout_height="match_parent"
                     tools:context="." />
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/textView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="TextView" />
-                </RelativeLayout>
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TextView" />
+
+
+
+                </LinearLayout>
             </FrameLayout>
 
 
@@ -92,7 +123,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:text="START"
+                    android:text="@string/start"
                     android:textSize="24dp" />
 
                 <Button
@@ -101,7 +132,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:text="STOP"
+                    android:text="@string/stop"
                     android:textSize="24dp" />
 
 
