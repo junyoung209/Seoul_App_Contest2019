@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.seoul.Group.GrouplistFragment;
-import com.example.seoul.Group.MylistFragment;
+import com.example.seoul.Group.MycrewlistFragment;
 import com.google.android.material.tabs.TabLayout;
 
 public class GroupActivity extends AppCompatActivity {
@@ -27,7 +27,7 @@ public class GroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_group);
 
         GrouplistFragment tab1 = new GrouplistFragment();
-        MylistFragment tab2 = new MylistFragment();
+        MycrewlistFragment tab2 = new MycrewlistFragment();
 
         //Initializing the TabLayout;
         tabLayout = (TabLayout)findViewById(R.id.tabLayout);
