@@ -378,6 +378,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
                 Snackbar.make(mLayout, "이 앱을 실행하려면 위치 접근 권한이 필요합니다.",
                         Snackbar.LENGTH_INDEFINITE).setAction("확인", new View.OnClickListener() {
 
+
                     @Override
                     public void onClick(View view) {
 
