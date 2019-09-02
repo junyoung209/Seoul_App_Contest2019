@@ -261,6 +261,8 @@ public class SingleWorkoutActivity extends AppCompatActivity
             }
         });
 
+
+
         locationRequest = new LocationRequest()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL_MS)
