@@ -17,6 +17,7 @@ import com.example.seoul.Single.Run.Runrecord;
 import com.example.seoul.Single.Run.RunrecordUploadDialog;
 import com.example.seoul.Single.Run.UploadRequest;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -48,7 +49,7 @@ public class DatauploadActivity extends AppCompatActivity {
         runTime=runRecord.getRunTime();
         runDistance=runRecord.getRunDistance();
         runVelocity=runRecord.getRunVelocity();
-        runDate=runRecord.getDateToday();
+        runDate=runRecord.getRunDate();
 
         runTime_View=(TextView)findViewById(R.id.upload_runTime);
         runDistance_View=(TextView)findViewById(R.id.upload_runDistance);
@@ -113,10 +114,14 @@ public class DatauploadActivity extends AppCompatActivity {
 
                 }
             };
-            Log.i("log",runDate);
-            UploadRequest uploadRequest=new UploadRequest(userID,runTime,runDate,responseListener);
+
+            //arraylist를 string으로 변환
+            UploadRequest uploadRequest=new UploadRequest(userID,runTime,runDistance,runVelocity,runDate,new Gson().toJson(runCord),responseListener);
             RequestQueue queue= Volley.newRequestQueue(DatauploadActivity.this);
             queue.add(uploadRequest);
+
+
+
         }
     };
 

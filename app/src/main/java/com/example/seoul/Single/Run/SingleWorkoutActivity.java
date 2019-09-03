@@ -62,7 +62,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
     private TextView mTimeTextView,mtemp,mdist,mDistanceTextView,mVelocityTextView;
 
     private String userID;
-    private String dateToday;
+    private String runDate;
     private String runTime;
     private String runDistance;
     private String runVelocity;
@@ -245,12 +245,12 @@ public class SingleWorkoutActivity extends AppCompatActivity
                 //액티비티 종료하면서 데이터 넘기자
 
 
-                dateToday=getToDay();
+                runDate=getToDay();
                 runTime=(String)mTimeTextView.getText();
                 runDistance=(String)mDistanceTextView.getText();
                 runVelocity=(String)mVelocityTextView.getText();
 
-                Runrecord runRecord=new Runrecord(userID,runTime,runDistance,runVelocity,dateToday);
+                Runrecord runRecord=new Runrecord(userID,runTime,runDistance,runVelocity,runDate);
 
                 Intent intent = new Intent(SingleWorkoutActivity.this, DatauploadActivity.class);
 

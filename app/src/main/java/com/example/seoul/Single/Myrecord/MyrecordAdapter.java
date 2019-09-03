@@ -39,7 +39,7 @@ public class MyrecordAdapter extends RecyclerView.Adapter<MyrecordAdapter.record
 
         holder.index.setText(Integer.toString(items.get(position).getIdx()));
         holder.time.setText(items.get(position).getRunTime());
-        holder.date.setText(items.get(position).getDate());
+        holder.date.setText(items.get(position).getRunDate());
 
     }
 

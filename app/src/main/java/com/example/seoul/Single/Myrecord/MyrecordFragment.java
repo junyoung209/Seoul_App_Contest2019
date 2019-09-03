@@ -25,6 +25,7 @@ import com.example.seoul.R;
 import com.example.seoul.Single.Run.RunrecordUploadDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -126,9 +127,20 @@ public class MyrecordFragment extends Fragment {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
+//                String runTime;
+//                String runDistance;
+//                String runVelocity;
+//                String runDate;
+//                jsonObject=jsonArray.getJSONObject(i);
+//                runTime=jsonObject.getString("runTime");
+//                runDate=jsonObject.getString("runDate");
+//                runDistance=jsonObject.getString("runDistance");
+//                runVelocity=jsonObject.getString("runVelocity");
                 try {
 
                     JSONObject jsonObject=new JSONObject(response);
+                    Log.i("log",response);
                     boolean success=jsonObject.getBoolean("success");
                     if(success)
                     {
@@ -139,7 +151,7 @@ public class MyrecordFragment extends Fragment {
 
                         for(int i=0,j=0;i<row;i++)
                         {
-                            Myrecord temp=new Myrecord(jsonObject.getInt(Integer.toString(j++)),jsonObject.getString(Integer.toString(j++)),jsonObject.getString(Integer.toString(j++)));
+                            Myrecord temp=new Myrecord(jsonObject.getInt(Integer.toString(j++)),jsonObject.getString(Integer.toString(j++)),jsonObject.getString(Integer.toString(j++)),jsonObject.getString(Integer.toString(j++)),jsonObject.getString(Integer.toString(j++)));
                             myrecord.add(temp);
                         }
                         callback.onSuccess(myrecord);
