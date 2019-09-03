@@ -23,17 +23,18 @@
         <activity android:name=".GroupActivity" />
         <activity android:name=".Group.CrewcreateActivity" />
         <activity android:name=".ApiActivity" />
-        <activity android:name=".SingleActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".SingleActivity" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+
         <activity android:name=".Single.Run.SingleWorkoutActivity" />
         <activity android:name=".Login.RegisterActivity" />
-        <activity android:name=".Login.LoginActivity"/>
+        <activity android:name=".Login.LoginActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAsqK5e58Ebj21zcJamYhLjvexfjbTRNuY"/>

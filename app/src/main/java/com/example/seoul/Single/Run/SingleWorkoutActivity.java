@@ -165,7 +165,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
 
 
                             //계산값이 8m보다 크면 path그려
-                            if(location1.distanceTo(location2)>=8)
+                            if(location1.distanceTo(location2)>=8&&location1.distanceTo(location2)<50)
                             {
                                 distance+=location1.distanceTo(location2);
                                 runCordlist.add(startLatLng);
@@ -203,8 +203,11 @@ public class SingleWorkoutActivity extends AppCompatActivity
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2500, 1, locationListener);
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,2500,1,locationListener);
+                //1000은 1초마다, 1은 1미터마다 해당 값을 갱신한다는 뜻으로, 딜레이마다 호출하기도 하지만
+                //위치값을 판별하여 일정 미터단위 움직임이 발생 했을 때에도 리스너를 호출 할 수 있다.
+
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2500, 8, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,2500,8,locationListener);
 
 
                 //스탑워치
@@ -318,14 +321,14 @@ public class SingleWorkoutActivity extends AppCompatActivity
             int hour = (msg.arg1 / 100) / 3600;
             //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
 
-
+            int time=sec+60*min+3600*hour;
 
 
             @SuppressLint("DefaultLocale") String result = String.format("%02d:%02d:%02d", hour, min, sec);
             mTimeTextView.setText(result);
             @SuppressLint("DefaultLocale") String distance=String.format("%.4f",SingleWorkoutActivity.distance/1000);
             mDistanceTextView.setText(distance+" Km");
-            @SuppressLint("DefaultLocale") String veleocity=String.format("%.4f",(double)SingleWorkoutActivity.distance/1000/(sec*3600));
+            @SuppressLint("DefaultLocale") String veleocity=String.format("%.4f",(double)(SingleWorkoutActivity.distance/time)*3600);
             mVelocityTextView.setText(veleocity+" Km/h");
 
         }
@@ -593,7 +596,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
 
             runState = true;
             startLatLng = new LatLng(mCurrentLocatiion.getLatitude(), mCurrentLocatiion.getLongitude());
-            CircleOptions circleOptions=new CircleOptions().center(startLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(24);
+            CircleOptions circleOptions=new CircleOptions().center(startLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(19);
             mGoogleMap.addCircle(circleOptions);
 
         }else{
@@ -607,7 +610,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
 
         PolylineOptions options = new PolylineOptions().add(startLatLng).add(endLatLng).width(20).color(Color.RED).geodesic(true);
         mGoogleMap.addPolyline(options);
-        CircleOptions circleOptions=new CircleOptions().center(endLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(24);
+        CircleOptions circleOptions=new CircleOptions().center(endLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(19);
         mGoogleMap.addCircle(circleOptions);
 //        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, 17));
     }
