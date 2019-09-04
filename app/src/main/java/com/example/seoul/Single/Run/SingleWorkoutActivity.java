@@ -77,8 +77,8 @@ public class SingleWorkoutActivity extends AppCompatActivity
     private Marker currentMarker = null;
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int UPDATE_INTERVAL_MS = 2500;  // 0.1초
-    private static final int FASTEST_UPDATE_INTERVAL_MS = 2500; // 0.05초
+    private static final int UPDATE_INTERVAL_MS = 5000;  // 0.1초
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 5000; // 0.05초
 
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     boolean needRequest = false;
@@ -206,8 +206,8 @@ public class SingleWorkoutActivity extends AppCompatActivity
                 //1000은 1초마다, 1은 1미터마다 해당 값을 갱신한다는 뜻으로, 딜레이마다 호출하기도 하지만
                 //위치값을 판별하여 일정 미터단위 움직임이 발생 했을 때에도 리스너를 호출 할 수 있다.
 
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2500, 8, locationListener);
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,2500,8,locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 8, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,5000,8,locationListener);
 
 
                 //스탑워치
@@ -326,9 +326,9 @@ public class SingleWorkoutActivity extends AppCompatActivity
 
             @SuppressLint("DefaultLocale") String result = String.format("%02d:%02d:%02d", hour, min, sec);
             mTimeTextView.setText(result);
-            @SuppressLint("DefaultLocale") String distance=String.format("%.4f",SingleWorkoutActivity.distance/1000);
+            @SuppressLint("DefaultLocale") String distance=String.format("%.2f",SingleWorkoutActivity.distance/1000);
             mDistanceTextView.setText(distance+" Km");
-            @SuppressLint("DefaultLocale") String veleocity=String.format("%.4f",(double)(SingleWorkoutActivity.distance/time)*3600);
+            @SuppressLint("DefaultLocale") String veleocity=String.format("%.2f",(double)((SingleWorkoutActivity.distance/1000)/time)*3600);
             mVelocityTextView.setText(veleocity+" Km/h");
 
         }
@@ -338,7 +338,8 @@ public class SingleWorkoutActivity extends AppCompatActivity
 
     public static String getToDay(){
 
-        SimpleDateFormat date=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat date=new SimpleDateFormat("yy-MM-dd");
+
         return date.format(new Date());
     }
 
@@ -594,10 +595,12 @@ public class SingleWorkoutActivity extends AppCompatActivity
         if(!runState){
             Toast.makeText(getApplicationContext(), "운동을 시작합니다.", Toast.LENGTH_SHORT).show();
 
+
             runState = true;
             startLatLng = new LatLng(mCurrentLocatiion.getLatitude(), mCurrentLocatiion.getLongitude());
             CircleOptions circleOptions=new CircleOptions().center(startLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(19);
             mGoogleMap.addCircle(circleOptions);
+
 
         }else{
             runState=false;
