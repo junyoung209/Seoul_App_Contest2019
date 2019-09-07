@@ -98,7 +98,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
     private Location location;
     private LatLng startLatLng = new LatLng(0, 0);
     private LatLng endLatLng = new LatLng(0, 0);
-    private boolean runState = false;
+    private int runState = 0;
 
 
     private LocationManager locationManager;
@@ -149,7 +149,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
                         mCurrentLocatiion = location;
                         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocatiion.getLatitude(),mCurrentLocatiion.getLongitude()),15));
 
-                        if(runState){
+                        if(runState == 1){
 
 
 
@@ -165,7 +165,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
 
 
                             //계산값이 8m보다 크면 path그려
-                            if(location1.distanceTo(location2)>=8)
+                            if(location1.distanceTo(location2)>=8&&location1.distanceTo(location2)<50)
                             {
                                 distance+=location1.distanceTo(location2);
                                 runCordlist.add(startLatLng);
@@ -203,6 +203,9 @@ public class SingleWorkoutActivity extends AppCompatActivity
                     // for ActivityCompat#requestPermissions for more details.
                     return;
                 }
+                //1000은 1초마다, 1은 1미터마다 해당 값을 갱신한다는 뜻으로, 딜레이마다 호출하기도 하지만
+                //위치값을 판별하여 일정 미터단위 움직임이 발생 했을 때에도 리스너를 호출 할 수 있다.
+
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2500, 1, locationListener);
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,2500,1,locationListener);
 
@@ -231,33 +234,37 @@ public class SingleWorkoutActivity extends AppCompatActivity
         mStopBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                runState=false;
-                runCordlist.add(startLatLng);
-                locationManager.removeUpdates(locationListener);
-                Toast.makeText(getApplicationContext(), "운동을 종료합니다.", Toast.LENGTH_SHORT).show();
-                Log.i("log",Integer.toString(runCordlist.size()));
+                if (runState == 0) {
+                    Toast.makeText(getApplicationContext(), "운동을 시작해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else if (runState == 1 || runState == 2) {
+                    runCordlist.add(startLatLng);
+                    locationManager.removeUpdates(locationListener);
+                    Toast.makeText(getApplicationContext(), "운동을 종료합니다.", Toast.LENGTH_SHORT).show();
+                    Log.i("log", Integer.toString(runCordlist.size()));
 
 
-
-                //액티비티 종료하면서 데이터 넘기자
-
-
-                dateToday=getToDay();
-                runTime=(String)mTimeTextView.getText();
-                runDistance=(String)mDistanceTextView.getText();
-                runVelocity=(String)mVelocityTextView.getText();
-
-                Runrecord runRecord=new Runrecord(userID,runTime,runDistance,runVelocity,dateToday);
-
-                Intent intent = new Intent(SingleWorkoutActivity.this, DatauploadActivity.class);
+                    //액티비티 종료하면서 데이터 넘기자
 
 
-                //좌표랑 데이터 넘김
-                intent.putExtra("runCord",runCordlist);
-                intent.putExtra("runRecord",runRecord);
+                    dateToday = getToDay();
+                    runTime = (String) mTimeTextView.getText();
+                    runDistance = (String) mDistanceTextView.getText();
+                    runVelocity = (String) mVelocityTextView.getText();
 
-                SingleWorkoutActivity.this.startActivity(intent);
-                finish();
+                    Runrecord runRecord = new Runrecord(userID, runTime, runDistance, runVelocity, dateToday);
+
+                    Intent intent = new Intent(SingleWorkoutActivity.this, DatauploadActivity.class);
+
+
+                    //좌표랑 데이터 넘김
+                    intent.putExtra("runCord", runCordlist);
+                    intent.putExtra("runRecord", runRecord);
+
+                    SingleWorkoutActivity.this.startActivity(intent);
+                    finish();
+                }
             }
         });
 
@@ -358,6 +365,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
         int hasCoarseLocationPermission = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION);
 
+        setDefaultLocation();
 
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED &&
                 hasCoarseLocationPermission == PackageManager.PERMISSION_GRANTED   ) {
@@ -586,18 +594,43 @@ public class SingleWorkoutActivity extends AppCompatActivity
         }
     }
 
+    public void setDefaultLocation() {
+
+
+        //디폴트 위치, Seoul
+        LatLng DEFAULT_LOCATION = new LatLng(37.56, 126.97);
+        String markerTitle = "위치정보 가져올 수 없음";
+        String markerSnippet = "위치 퍼미션과 GPS 활성 여부 확인하세요";
+
+
+        if (currentMarker != null) currentMarker.remove();
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(DEFAULT_LOCATION);
+        markerOptions.title(markerTitle);
+        markerOptions.snippet(markerSnippet);
+        markerOptions.draggable(true);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        currentMarker = mGoogleMap.addMarker(markerOptions);
+
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15);
+        mGoogleMap.moveCamera(cameraUpdate);
+
+    }
 
     private void trueWalkState(){
-        if(!runState){
+        if(runState == 0 || runState == 2){
             Toast.makeText(getApplicationContext(), "운동을 시작합니다.", Toast.LENGTH_SHORT).show();
 
-            runState = true;
+
+            runState = 1;
             startLatLng = new LatLng(mCurrentLocatiion.getLatitude(), mCurrentLocatiion.getLongitude());
-            CircleOptions circleOptions=new CircleOptions().center(startLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(24);
+            CircleOptions circleOptions=new CircleOptions().center(startLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(19);
             mGoogleMap.addCircle(circleOptions);
 
+
         }else{
-            runState=false;
+            runState=2;
             Toast.makeText(getApplicationContext(), "운동을 일시중지합니다.", Toast.LENGTH_SHORT).show();
 
         }

@@ -33,6 +33,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -189,6 +190,7 @@ public class RunFragment extends Fragment
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
+        setDefaultLocation();
         //런타임 퍼미션 요청 대화상자나 GPS 활성 요청 대화상자 보이기전에 지도의 초기위치를 서울로 이동
 //        setCurrentLocation(null, "위치정보 가져올 수 없음", "위치 퍼미션과 GPS 활성 여부 확인");
 
@@ -341,7 +343,29 @@ public class RunFragment extends Fragment
     }
 
 
+    public void setDefaultLocation() {
 
+
+        //디폴트 위치, Seoul
+        LatLng DEFAULT_LOCATION = new LatLng(37.56, 126.97);
+        String markerTitle = "위치정보 가져올 수 없음";
+        String markerSnippet = "위치 퍼미션과 GPS 활성 여부 확인하세요";
+
+
+        if (currentMarker != null) currentMarker.remove();
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(DEFAULT_LOCATION);
+        markerOptions.title(markerTitle);
+        markerOptions.snippet(markerSnippet);
+        markerOptions.draggable(true);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        currentMarker = mGoogleMap.addMarker(markerOptions);
+
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15);
+        mGoogleMap.moveCamera(cameraUpdate);
+
+    }
 
     @Nullable
     @Override
