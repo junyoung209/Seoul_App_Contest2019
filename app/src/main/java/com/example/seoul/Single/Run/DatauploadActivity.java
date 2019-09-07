@@ -1,7 +1,11 @@
 package com.example.seoul.Single.Run;
 
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +18,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.seoul.R;
-import com.example.seoul.Single.Run.Runrecord;
+import com.example.seoul.Single.Myrecord.Myrecord;
+/*import com.example.seoul.Single.Run.Runrecord;*/
 import com.example.seoul.Single.Run.RunrecordUploadDialog;
 import com.example.seoul.Single.Run.UploadRequest;
 import com.google.android.gms.maps.CameraUpdate;
@@ -33,6 +38,10 @@ import com.google.gson.Gson;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class DatauploadActivity extends AppCompatActivity
@@ -52,6 +61,8 @@ public class DatauploadActivity extends AppCompatActivity
     private Marker resultMarker = null;
 
     private TextView runTime_View,runDistance_View,runVelocity_View,runDate_View;
+
+    private Myrecord myRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +127,30 @@ public class DatauploadActivity extends AppCompatActivity
             runrecordUploadDialog.dismiss();
 
 
+            /*GoogleMap.SnapshotReadyCallback callback = new GoogleMap.SnapshotReadyCallback() {
+                Bitmap bitmap;
+                @Override
+                public void onSnapshotReady(Bitmap snapshot) {
+                    ContextWrapper cw = new ContextWrapper(getApplicationContext());
+                    File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+
+                    String fileName = (myRecord.getIdx()) + ".jpg";
+                    File mypath = new File(directory, fileName);
+                    bitmap = snapshot;
+                    try{
+                        FileOutputStream out =  new FileOutputStream(mypath);
+
+                        bitmap.compress(Bitmap.CompressFormat.JPEG,100,out);
+                        Log.e("MyTag", "FileStored : " + fileName);
+                        out.close();
+                    }catch(FileNotFoundException e){
+                        Log.e("MyTag", "FileNotFoundException : " + e.getMessage());
+                    }catch (IOException e){
+                        Log.e("MyTag", "IOException : " + e.getMessage());
+                    }
+                }
+            };
+            mGoogleMap.snapshot(callback);*/
             //데이터 업로드
             Response.Listener<String> responseListener=new Response.Listener<String>() {
                 @Override
@@ -136,6 +171,9 @@ public class DatauploadActivity extends AppCompatActivity
 
                 }
             };
+
+
+
 
             //arraylist를 string으로 변환
             UploadRequest uploadRequest=new UploadRequest(userID,runTime,runDistance,runVelocity,runDate,new Gson().toJson(runCord),responseListener);
@@ -200,4 +238,6 @@ public class DatauploadActivity extends AppCompatActivity
         /*CircleOptions circleOptions=new CircleOptions().center(endLatLng).radius(0.1).strokeColor(Color.RED).strokeWidth(19);
         mGoogleMap.addCircle(circleOptions);*/
     }
+
+
 }
