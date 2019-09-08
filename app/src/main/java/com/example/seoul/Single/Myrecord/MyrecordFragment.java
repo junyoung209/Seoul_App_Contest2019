@@ -23,11 +23,14 @@ import com.android.volley.toolbox.Volley;
 
 import com.example.seoul.R;
 import com.example.seoul.Single.Run.RunrecordUploadDialog;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class MyrecordFragment extends Fragment {
@@ -45,10 +48,7 @@ public class MyrecordFragment extends Fragment {
 
     private SwipeRefreshLayout refresh;
     private MyrecordAdapter adapter;
-    private FloatingActionButton modify;
 
-    private Button Delete_btn,Cancel_btn;
-    private RunrecordUploadDialog runrecordUploadDialog;
 
 
     @SuppressLint("WrongConstant")
@@ -95,7 +95,7 @@ public class MyrecordFragment extends Fragment {
 
             }
         });
-        Log.i("log",Integer.toString(myrecord.size()));
+
 
 
 //        modify = (FloatingActionButton) view.findViewById(R.id.myrecord_Modify);
@@ -126,20 +126,56 @@ public class MyrecordFragment extends Fragment {
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
+
+//                jsonObject=jsonArray.getJSONObject(i);
+//                runTime=jsonObject.getString("runTime");
+//                runDate=jsonObject.getString("runDate");
+//                runDistance=jsonObject.getString("runDistance");
+//                runVelocity=jsonObject.getString("runVelocity");
                 try {
 
+
+
+
+
                     JSONObject jsonObject=new JSONObject(response);
+
                     boolean success=jsonObject.getBoolean("success");
                     if(success)
                     {
                         myrecord.clear();
                         int row=jsonObject.getInt("row");
-                        int total=jsonObject.getInt("total");
 
 
-                        for(int i=0,j=0;i<row;i++)
+
+                        for(int i=0;i<row;i++)
                         {
-                            Myrecord temp=new Myrecord(jsonObject.getInt(Integer.toString(j++)),jsonObject.getString(Integer.toString(j++)),jsonObject.getString(Integer.toString(j++)));
+                            int idx;
+                            String runTime;
+                            String runDistance;
+                            String runVelocity;
+                            String runDate;
+                            int LatLng_count;
+                            ArrayList<LatLng> LatLng_temp=new ArrayList<>();
+
+                            JSONObject json_temp=jsonObject.getJSONObject(Integer.toString(i));
+                            idx=json_temp.getInt("idx");
+                            runTime=json_temp.getString("runTime");
+                            runDistance=json_temp.getString("runDistance");
+                            runVelocity=json_temp.getString("runVelocity");
+                            runDate=json_temp.getString("runDate");
+
+                            JSONObject json_cord=json_temp.getJSONObject("LatLng");
+                            LatLng_count=json_cord.getInt("LatLngCount");
+                            for(int j=0;j<LatLng_count/2;)
+                            {
+                                LatLng_temp.add(new LatLng(json_cord.getDouble(Integer.toString(j)),json_cord.getDouble(Integer.toString(j+1))));
+                                j+=2;
+                            }
+
+
+                            Myrecord temp=new Myrecord(idx,userID, runTime,runDistance, runVelocity,runDate,LatLng_temp);
                             myrecord.add(temp);
                         }
                         callback.onSuccess(myrecord);

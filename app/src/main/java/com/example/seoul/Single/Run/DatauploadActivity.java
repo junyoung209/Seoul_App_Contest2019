@@ -18,7 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.seoul.R;
-import com.example.seoul.Single.Myrecord.Myrecord;
+import com.example.seoul.Single.Run.Runrecord;
 /*import com.example.seoul.Single.Run.Runrecord;*/
 import com.example.seoul.Single.Run.RunrecordUploadDialog;
 import com.example.seoul.Single.Run.UploadRequest;
@@ -62,7 +62,6 @@ public class DatauploadActivity extends AppCompatActivity
 
     private TextView runTime_View,runDistance_View,runVelocity_View,runDate_View;
 
-    private Myrecord myRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +77,7 @@ public class DatauploadActivity extends AppCompatActivity
         runTime=runRecord.getRunTime();
         runDistance=runRecord.getRunDistance();
         runVelocity=runRecord.getRunVelocity();
-        runDate=runRecord.getDateToday();
+        runDate=runRecord.getRunDate();
 
         runTime_View=(TextView)findViewById(R.id.upload_runTime);
         runDistance_View=(TextView)findViewById(R.id.upload_runDistance);
@@ -95,7 +94,6 @@ public class DatauploadActivity extends AppCompatActivity
         runrecordUploadDialog = new RunrecordUploadDialog(this,positiveListener,negativeListener);
 
 
-        //Toast.makeText(getApplicationContext(), runCord.get(0).toString(),Toast.LENGTH_SHORT).show();
         Upload_btn=(Button)findViewById(R.id.upload_btn);
 
         Upload_btn.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +115,7 @@ public class DatauploadActivity extends AppCompatActivity
         });
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.upload_map);
         mapFragment.getMapAsync(this);
     }
 
@@ -219,15 +217,18 @@ public class DatauploadActivity extends AppCompatActivity
 
 
 
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 15);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(DEFAULT_LOCATION, 17);
         mGoogleMap.moveCamera(cameraUpdate);
 
     }
 
     public void setPath(ArrayList<LatLng> runPath){
         PolylineOptions options = new PolylineOptions();
+        CircleOptions circleOptionsStart=new CircleOptions().center(runPath.get(0)).radius(0.1).strokeColor(Color.RED).strokeWidth(19);
+        mGoogleMap.addCircle(circleOptionsStart);
+
         for(int i=0; i<runPath.size()-1; i++){
-           // PolylineOptions options = new PolylineOptions().add(startLatLng).add(endLatLng).width(20).color(Color.RED).geodesic(true);
+            // PolylineOptions options = new PolylineOptions().add(startLatLng).add(endLatLng).width(20).color(Color.RED).geodesic(true);
             options.add(runPath.get(i)).add(runPath.get(i+1)).width(20).color(Color.RED).geodesic(true);
             mGoogleMap.addPolyline(options);
             CircleOptions circleOptions=new CircleOptions().center(runPath.get(i+1)).radius(0.1).strokeColor(Color.RED).strokeWidth(19);

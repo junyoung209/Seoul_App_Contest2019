@@ -62,7 +62,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
     private TextView mTimeTextView,mtemp,mdist,mDistanceTextView,mVelocityTextView;
 
     private String userID;
-    private String dateToday;
+    private String runDate;
     private String runTime;
     private String runDistance;
     private String runVelocity;
@@ -77,8 +77,8 @@ public class SingleWorkoutActivity extends AppCompatActivity
     private Marker currentMarker = null;
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int UPDATE_INTERVAL_MS = 2500;  // 0.1초
-    private static final int FASTEST_UPDATE_INTERVAL_MS = 2500; // 0.05초
+    private static final int UPDATE_INTERVAL_MS = 5000;  // 0.1초
+    private static final int FASTEST_UPDATE_INTERVAL_MS = 5000; // 0.05초
 
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     boolean needRequest = false;
@@ -122,7 +122,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
 
         userID= getIntent().getStringExtra("userID");
         distance=0;
-     //   Log.i("log",userID);
+        //   Log.i("log",userID);
         mStartBtn = (Button)findViewById(R.id.start_btn);
         mStopBtn = (Button)findViewById(R.id.stop_btn);
         mTimeTextView = (TextView)findViewById(R.id.workout_timeView);
@@ -206,8 +206,8 @@ public class SingleWorkoutActivity extends AppCompatActivity
                 //1000은 1초마다, 1은 1미터마다 해당 값을 갱신한다는 뜻으로, 딜레이마다 호출하기도 하지만
                 //위치값을 판별하여 일정 미터단위 움직임이 발생 했을 때에도 리스너를 호출 할 수 있다.
 
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2500, 1, locationListener);
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,2500,1,locationListener);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 8, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,5000,8,locationListener);
 
 
                 //스탑워치
@@ -248,19 +248,19 @@ public class SingleWorkoutActivity extends AppCompatActivity
                     //액티비티 종료하면서 데이터 넘기자
 
 
-                    dateToday = getToDay();
-                    runTime = (String) mTimeTextView.getText();
-                    runDistance = (String) mDistanceTextView.getText();
-                    runVelocity = (String) mVelocityTextView.getText();
+                    runDate=getToDay();
+                    runTime=(String)mTimeTextView.getText();
+                    runDistance=(String)mDistanceTextView.getText();
+                    runVelocity=(String)mVelocityTextView.getText();
 
-                    Runrecord runRecord = new Runrecord(userID, runTime, runDistance, runVelocity, dateToday);
+                    Runrecord runRecord=new Runrecord(userID,runTime,runDistance,runVelocity,runDate);
 
                     Intent intent = new Intent(SingleWorkoutActivity.this, DatauploadActivity.class);
 
 
                     //좌표랑 데이터 넘김
-                    intent.putExtra("runCord", runCordlist);
-                    intent.putExtra("runRecord", runRecord);
+                    intent.putExtra("runCord",runCordlist);
+                    intent.putExtra("runRecord",runRecord);
 
                     SingleWorkoutActivity.this.startActivity(intent);
                     finish();
@@ -325,14 +325,14 @@ public class SingleWorkoutActivity extends AppCompatActivity
             int hour = (msg.arg1 / 100) / 3600;
             //1000이 1초 1000*60 은 1분 1000*60*10은 10분 1000*60*60은 한시간
 
-
+            int time=sec+60*min+3600*hour;
 
 
             @SuppressLint("DefaultLocale") String result = String.format("%02d:%02d:%02d", hour, min, sec);
             mTimeTextView.setText(result);
-            @SuppressLint("DefaultLocale") String distance=String.format("%.4f",SingleWorkoutActivity.distance/1000);
+            @SuppressLint("DefaultLocale") String distance=String.format("%.2f",SingleWorkoutActivity.distance/1000);
             mDistanceTextView.setText(distance+" Km");
-            @SuppressLint("DefaultLocale") String veleocity=String.format("%.4f",(double)SingleWorkoutActivity.distance/1000/(sec*3600));
+            @SuppressLint("DefaultLocale") String veleocity=String.format("%.2f",(double)((SingleWorkoutActivity.distance/1000)/time)*3600);
             mVelocityTextView.setText(veleocity+" Km/h");
 
         }
@@ -342,7 +342,7 @@ public class SingleWorkoutActivity extends AppCompatActivity
 
     public static String getToDay(){
 
-        SimpleDateFormat date=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat date=new SimpleDateFormat("yy-MM-dd");
         return date.format(new Date());
     }
 

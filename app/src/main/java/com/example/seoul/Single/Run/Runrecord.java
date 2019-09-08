@@ -19,20 +19,20 @@ public class Runrecord implements Serializable {
 
     String userID;
     String runTime;
-    String dateToday;
+    String runDate;
     String runDistance;
     String runVelocity;
 
 
 
-    public Runrecord(String userID, String runTime,String runDistance,String runVelocity,String dateToday)
+    public Runrecord(String userID, String runTime,String runDistance,String runVelocity,String runDate)
     {
 
         this.userID=userID;
         this.runTime=runTime;
         this.runDistance=runDistance;
         this.runVelocity=runVelocity;
-        this.dateToday=dateToday;
+        this.runDate=runDate;
     }
 
     public Runrecord() {
@@ -47,8 +47,8 @@ public class Runrecord implements Serializable {
         return runTime;
     }
 
-    public String getDateToday() {
-        return dateToday;
+    public String getRunDate() {
+        return runDate;
     }
 
     public String getRunDistance() {

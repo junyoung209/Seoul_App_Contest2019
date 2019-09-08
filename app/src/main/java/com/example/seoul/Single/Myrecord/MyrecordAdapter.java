@@ -13,6 +13,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.seoul.R;
+import com.example.seoul.Single.Run.Runrecord;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 
@@ -39,7 +41,7 @@ public class MyrecordAdapter extends RecyclerView.Adapter<MyrecordAdapter.record
 
         holder.index.setText(Integer.toString(items.get(position).getIdx()));
         holder.time.setText(items.get(position).getRunTime());
-        holder.date.setText(items.get(position).getDate());
+        holder.date.setText(items.get(position).getRunDate());
 
     }
 
@@ -90,9 +92,18 @@ public class MyrecordAdapter extends RecyclerView.Adapter<MyrecordAdapter.record
 //            myrecord_radio.setVisibility(view.VISIBLE);
 
             Intent intent = new Intent(view.getContext() , MyrecordResult.class);
-            intent.putExtra("idx",index.getText());
-            intent.putExtra("time",time.getText());
-            intent.putExtra("data",date.getText());
+
+
+            Runrecord runRecord=new Runrecord(items.get(getPosition()).getUserID(), items.get(getPosition()).getRunTime(),items.get(getPosition()).getRunDistance(),items.get(getPosition()).getRunTime(),items.get(getPosition()).getRunDate());
+
+            ArrayList<LatLng> runCordlist=items.get(getPosition()).getCord();
+            intent.putExtra("runCord",runCordlist);
+            intent.putExtra("runRecord",runRecord);
+            intent.putExtra("idx",items.get(getPosition()).getIdx());
+
+
+
+
             view.getContext().startActivity(intent);
 
 
