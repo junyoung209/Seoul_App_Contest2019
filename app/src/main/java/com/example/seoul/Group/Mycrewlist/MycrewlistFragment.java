@@ -1,4 +1,4 @@
-package com.example.seoul.Group;
+package com.example.seoul.Group.Mycrewlist;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.seoul.R;
+import com.example.seoul.Single.Run.SingleWorkoutActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -27,10 +29,13 @@ public class MycrewlistFragment extends Fragment {
 
     private RecyclerView crewlist_rv, schedule_rv;
     private LinearLayoutManager llm_vertical, llm_horizontal;
+
     private List<Integer> count1, count2;
     private int i = 0;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    TextView crew_create_text;
+    private Button crew_create_text;
+    private String userID;
+    private ArrayList<GroupData> groupData;
 
     @SuppressLint("WrongConstant")
     @Nullable
@@ -44,6 +49,14 @@ public class MycrewlistFragment extends Fragment {
         llm_vertical.setOrientation(LinearLayoutManager.VERTICAL);
         llm_horizontal = new LinearLayoutManager(getActivity());
         llm_horizontal.setOrientation(LinearLayoutManager.HORIZONTAL);
+
+        Bundle bundle=this.getArguments();
+        if(bundle!=null)
+        {
+            userID=bundle.getString("userID");
+        }
+        Log.i("log",userID+"crewlist");
+
 
         count1 = new ArrayList<>();
         count2 = new ArrayList<>();
@@ -73,23 +86,29 @@ public class MycrewlistFragment extends Fragment {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
-        crew_create_text = (TextView) view.findViewById(R.id.crew_create);
+
+
+        crew_create_text = (Button) view.findViewById(R.id.crew_create);
         crew_create_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CrewcreateActivity.class);
+                intent.putExtra("userID",userID);
                 startActivity(intent);
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), com.example.seoul.Group.CrewcreateActivity.class);
-                startActivity(intent);
-            }
-        });
+
+
+
+//        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getActivity(), CrewcreateActivity.class);
+//                startActivity(intent);
+//            }
+//        });
         return view;
     }
 

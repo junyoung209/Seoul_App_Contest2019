@@ -1,4 +1,4 @@
-package com.example.seoul.Group;
+package com.example.seoul.Group.Grouplist;
 
 import android.content.Context;
 import android.net.Uri;

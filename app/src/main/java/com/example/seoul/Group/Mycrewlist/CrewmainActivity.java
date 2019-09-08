@@ -1,4 +1,4 @@
-package com.example.seoul.Group;
+package com.example.seoul.Group.Mycrewlist;
 
 
 import android.os.Bundle;

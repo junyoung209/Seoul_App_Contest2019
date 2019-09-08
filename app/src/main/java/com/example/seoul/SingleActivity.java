@@ -97,6 +97,7 @@ public class SingleActivity extends AppCompatActivity {
 
                 Intent intent=new Intent(SingleActivity.this,GroupActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.putExtra("userID",userID);
                 SingleActivity.this.startActivity(intent);
             }
         });
@@ -106,6 +107,7 @@ public class SingleActivity extends AppCompatActivity {
 
                 Intent intent=new Intent(SingleActivity.this,MypageActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.putExtra("userID",userID);
                 SingleActivity.this.startActivity(intent);
             }
         });
@@ -115,6 +117,7 @@ public class SingleActivity extends AppCompatActivity {
 
                 Intent intent=new Intent(SingleActivity.this,ApiActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.putExtra("userID",userID);
                 SingleActivity.this.startActivity(intent);
             }
         });
