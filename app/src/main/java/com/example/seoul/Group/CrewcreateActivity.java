@@ -9,6 +9,7 @@ import com.example.seoul.R;
 
 public class CrewcreateActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

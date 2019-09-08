@@ -194,6 +194,7 @@ public class DatauploadActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap){
         Log.d("log", "onMapReady :");
 
+
         mGoogleMap= googleMap;
         for(int i=0; i<runCord.size(); i++){
             Lat+= runCord.get(i).latitude;
