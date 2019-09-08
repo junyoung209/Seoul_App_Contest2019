@@ -94,7 +94,7 @@ public class MyrecordAdapter extends RecyclerView.Adapter<MyrecordAdapter.record
             Intent intent = new Intent(view.getContext() , MyrecordResult.class);
 
 
-            Runrecord runRecord=new Runrecord(items.get(getPosition()).getUserID(), items.get(getPosition()).getRunTime(),items.get(getPosition()).getRunDistance(),items.get(getPosition()).getRunTime(),items.get(getPosition()).getRunDate());
+            Runrecord runRecord=new Runrecord(items.get(getPosition()).getUserID(), items.get(getPosition()).getRunTime(),items.get(getPosition()).getRunDistance(),items.get(getPosition()).getRunVelocity(),items.get(getPosition()).getRunDate());
 
             ArrayList<LatLng> runCordlist=items.get(getPosition()).getCord();
             intent.putExtra("runCord",runCordlist);

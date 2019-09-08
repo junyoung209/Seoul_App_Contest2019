@@ -1,10 +1,13 @@
 package com.example.seoul.Group;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,9 +33,12 @@ public class Mycrewlist_RvAdapter extends RecyclerView.Adapter<Mycrewlist_RvAdap
         CardView cv;
         TextView title;
         TextView content;
+        public View view;
 
         public CustomViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
+
             cv = (CardView)itemView.findViewById(R.id.item_cardview);
             title = (TextView)itemView.findViewById(R.id.item_tv_title);
             content = (TextView)itemView.findViewById(R.id.item_tv_content);
@@ -53,6 +59,13 @@ public class Mycrewlist_RvAdapter extends RecyclerView.Adapter<Mycrewlist_RvAdap
         final Integer item = items.get(position);
         holder.title.setText(item + "");
         holder.content.setText(item + "content");
+
+        holder.view.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                context.startActivity(new Intent(context, CrewmainActivity.class));
+            }
+        });
     }
 
     @Override
