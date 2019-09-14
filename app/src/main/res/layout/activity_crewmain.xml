@@ -67,7 +67,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:background="#FF9800"
-            android:text="크루생성"
+            android:text="가입 및 참가신청"
             android:textColor="#ffffff"
             android:textSize="20dp"
             android:textStyle="bold" />

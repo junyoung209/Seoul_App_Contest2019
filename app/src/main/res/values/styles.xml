@@ -17,6 +17,8 @@
         <item name="windowActionBar">false</item>
         <item name="android:windowAnimationStyle">@null</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorAccent">@color/cursorColor</item>
+        <item name="colorControlNormal">@color/cursorColor</item>
     </style>
 
     <style name="TabTheme" parent="Theme.AppCompat.Light.DarkActionBar">

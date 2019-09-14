@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -29,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private CheckBox checkBox;
     private EditText idText;
     private EditText passwordText;
-    private Button loginButton;
+    private ImageButton loginButton;
     private boolean saveLoginData;
 
     @Override
@@ -37,25 +38,24 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        TextView registerButton=(TextView)findViewById(R.id.registerButton);
+        ImageButton registerButton = (ImageButton) findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent registerIntent = new Intent(LoginActivity.this,RegisterActivity.class);
+                Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 LoginActivity.this.startActivity(registerIntent);
             }
         });
 
-        appData=getSharedPreferences("appData",MODE_PRIVATE);
+        appData = getSharedPreferences("appData", MODE_PRIVATE);
         load();
 
         idText = (EditText) findViewById(R.id.idText);
         passwordText = (EditText) findViewById(R.id.passwordText);
-        loginButton = (Button)findViewById(R.id.loginButton);
-        checkBox=(CheckBox)findViewById(R.id.checkBox);
+        loginButton = (ImageButton) findViewById(R.id.loginButton);
+        checkBox = (CheckBox) findViewById(R.id.checkBox);
 
-        if(saveLoginData)
-        {
+        if (saveLoginData) {
             idText.setText(userID);
             passwordText.setText(userPassword);
             checkBox.setChecked(saveLoginData);
@@ -68,15 +68,15 @@ public class LoginActivity extends AppCompatActivity {
 
                 userID = idText.getText().toString();
                 userPassword = passwordText.getText().toString();
-                Response.Listener<String> responseLisner = new Response.Listener<String>(){
+                Response.Listener<String> responseLisner = new Response.Listener<String>() {
                     @Override
 
                     public void onResponse(String response) {
-                        try{
+                        try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
 
-                            if(success){
+                            if (success) {
 //                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
 //                                dialog = builder.setMessage("로그인에 성공했습니다")
 //                                        .setPositiveButton("확인", null)
@@ -84,17 +84,17 @@ public class LoginActivity extends AppCompatActivity {
 //                                dialog.show();
                                 save();
                                 Intent intent = new Intent(LoginActivity.this, SingleActivity.class);
-                                intent.putExtra("userID",userID); //액티비티 전환하면서 id넘겨
+                                intent.putExtra("userID", userID); //액티비티 전환하면서 id넘겨
                                 LoginActivity.this.startActivity(intent);
                                 finish();
-                            }else {
+                            } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                                 dialog = builder.setMessage("계정을 다시 확인하세요")
                                         .setNegativeButton("다시시도", null)
                                         .create();
                                 dialog.show();
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
@@ -108,6 +108,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+
     private void save() {
         // SharedPreferences 객체만으론 저장 불가능 Editor 사용
         SharedPreferences.Editor editor = appData.edit();
