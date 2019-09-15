@@ -22,8 +22,8 @@
         <activity android:name=".MypageActivity" />
 
         <activity android:name=".GroupActivity" />
-        <activity android:name=".Group.CrewcreateActivity" />
-        <activity android:name=".Group.CrewmainActivity" />
+        <activity android:name=".Group.Mycrewlist.CrewmainActivity" />
+        <activity android:name=".Group.Mycrewlist.CrewcreateActivity" />
         <activity android:name=".ApiActivity" />
         <activity android:name=".SingleActivity" />
 
