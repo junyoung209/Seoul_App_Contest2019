@@ -85,9 +85,9 @@ public class GrouplistFragment extends Fragment {
                 count1.add(i);
                 count2.add(i);
 
-                com.example.seoul.Group.GroupSurcrewlist_RvAdapter surcrewlist_adapter = new com.example.seoul.Group.GroupSurcrewlist_RvAdapter(getActivity(), count1, i);
+                com.example.seoul.Group.Grouplist.GroupSurcrewlist_RvAdapter surcrewlist_adapter = new com.example.seoul.Group.Grouplist.GroupSurcrewlist_RvAdapter(getActivity(), count1, i);
                 surcrewlist_rv.setAdapter(surcrewlist_adapter);
-                com.example.seoul.Group.GroupAllcrewlist_RvAdapter allcrewlist_adapter = new com.example.seoul.Group.GroupAllcrewlist_RvAdapter(getActivity(), count2, i);
+                com.example.seoul.Group.Grouplist.GroupAllcrewlist_RvAdapter allcrewlist_adapter = new com.example.seoul.Group.Grouplist.GroupAllcrewlist_RvAdapter(getActivity(), count2, i);
                 allcrewlist_rv.setAdapter(allcrewlist_adapter);
 
                 surcrewlist_adapter.notifyDataSetChanged();
