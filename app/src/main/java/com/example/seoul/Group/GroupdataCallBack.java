@@ -1,6 +1,4 @@
-package com.example.seoul.Group.Mycrewlist;
-
-import com.example.seoul.Single.Myrecord.Myrecord;
+package com.example.seoul.Group;
 
 import java.util.ArrayList;
 

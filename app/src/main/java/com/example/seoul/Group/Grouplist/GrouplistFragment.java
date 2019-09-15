@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -26,20 +24,16 @@ import android.widget.TextView;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.seoul.Group.GroupData;
 import com.example.seoul.Group.Mycrewlist.CrewcreateActivity;
-import com.example.seoul.Group.Mycrewlist.GroupData;
-import com.example.seoul.Group.Mycrewlist.GroupdataCallBack;
-import com.example.seoul.Group.Mycrewlist.MycrewlistRequest;
-import com.example.seoul.Group.Mycrewlist.Mycrewlist_RvAdapter;
+import com.example.seoul.Group.GroupdataCallBack;
 import com.example.seoul.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 
 public class GrouplistFragment extends Fragment {
@@ -60,7 +54,7 @@ public class GrouplistFragment extends Fragment {
     private ProgressDialog pdialog;
     private String userID,userRegion;
 
-
+    private TextView location;
 
     private GroupSurcrewlist_RvAdapter surcrewlist_adapter;
     private GroupAllcrewlist_RvAdapter allcrewlist_adapter;
@@ -77,6 +71,7 @@ public class GrouplistFragment extends Fragment {
         surcrewlist_rv = (RecyclerView) view.findViewById(R.id.surcrewlist_recyclerView);
         allcrewlist_rv = (RecyclerView) view.findViewById(R.id.allcrewlist_recyclerView);
         mTxtDate = (TextView) view.findViewById(R.id.txtdate);
+        location=(TextView)view.findViewById(R.id.grouplist_userlocation);
 
 
         pdialog=new ProgressDialog(getActivity());
@@ -92,7 +87,7 @@ public class GrouplistFragment extends Fragment {
             userRegion=bundle.getString("userRegion");
             Log.i("log",userRegion);
         }
-
+        location.setText(userRegion+", 서울시");
 
         Calendar cal = new GregorianCalendar();
         mYear = cal.get(Calendar.YEAR);
@@ -112,7 +107,7 @@ public class GrouplistFragment extends Fragment {
 
         surcrewlist_rv.setHasFixedSize(true);
         surcrewlist_rv.setLayoutManager(llm_vertical);
-        allcrewlist_rv.setHasFixedSize(true);
+        allcrewlist_rv.setHasFixedSize(false);
         allcrewlist_rv.setLayoutManager(llm_vertical1);
 
 
@@ -140,7 +135,7 @@ public class GrouplistFragment extends Fragment {
                 allcrewlist_rv.setAdapter(allcrewlist_adapter);
                 allcrewlist_adapter.notifyDataSetChanged();
 
-                pdialog.dismiss();
+
             }
         });
 
@@ -153,17 +148,16 @@ public class GrouplistFragment extends Fragment {
             }
         });
 
+        pdialog.dismiss();
         return view;
     }
 
     void UpdateNow() {
-        mTxtDate.setText(String.format("%d년 %d월 %d일", mYear,
-                mMonth + 1, mDay));
+        mTxtDate.setText(String.format("%d년 %d월 %d일", mYear, mMonth + 1, mDay));
     }
 
     public void mOnClick(View v) {
-        new DatePickerDialog(getActivity(), AlertDialog.THEME_HOLO_LIGHT, mDateSetListener, mYear,
-                mMonth, mDay).show();
+        new DatePickerDialog(getActivity(), AlertDialog.THEME_HOLO_LIGHT, mDateSetListener, mYear, mMonth, mDay).show();
     }
 
     //날짜 대화상자 리스너 부분
@@ -194,9 +188,9 @@ public class GrouplistFragment extends Fragment {
                 try {
 
                     JSONObject jsonObject=new JSONObject(response);
-
+                    Log.i("log",userRegion);
                     boolean success=jsonObject.getBoolean("success");
-                    Log.i("log",response);
+                    Log.i("log",response+"surcrew");
                     if(success)
                     {
                         groupSurData.clear();
@@ -253,7 +247,7 @@ public class GrouplistFragment extends Fragment {
                     JSONObject jsonObject=new JSONObject(response);
 
                     boolean success=jsonObject.getBoolean("success");
-                    Log.i("log",response);
+                    Log.i("log",response+"allcrew");
                     if(success)
                     {
                         groupAllData.clear();
@@ -274,9 +268,9 @@ public class GrouplistFragment extends Fragment {
 
 
                             GroupData temp=new GroupData(crewName,crewRegion,crewHost,crewInfo);
-                            groupSurData.add(temp);
+                            groupAllData.add(temp);
                         }
-                        callback.onSuccess(groupSurData);
+                        callback.onSuccess(groupAllData);
 
                     }
                     else {

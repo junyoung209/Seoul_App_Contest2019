@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -20,18 +19,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.seoul.Group.GroupdataCallBack;
+import com.example.seoul.Group.GroupData;
 import com.example.seoul.R;
-import com.example.seoul.Single.Myrecord.Myrecord;
-import com.example.seoul.Single.Myrecord.MyrecordAdapter;
-import com.example.seoul.Single.Myrecord.RecordCallBack;
-import com.example.seoul.Single.Myrecord.RecordRequest;
-import com.example.seoul.Single.Run.SingleWorkoutActivity;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONObject;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +80,6 @@ public class MycrewlistFragment extends Fragment {
         Log.i("log",userID+"crewlist");
 
 
-        count1 = new ArrayList<>();
         count2 = new ArrayList<>();
 
         crewlist_rv.setHasFixedSize(true);
@@ -217,8 +209,10 @@ public class MycrewlistFragment extends Fragment {
             @Override
             public void onSuccess(ArrayList<GroupData> result) {
                 groupData=result;
-                crewlist_adapter.notifyDataSetChanged();
-
+                if(crewlist_adapter!=null)
+                {
+                    crewlist_adapter.notifyDataSetChanged();
+                }
             }
         });
     }

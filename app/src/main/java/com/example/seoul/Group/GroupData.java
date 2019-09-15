@@ -1,4 +1,4 @@
-package com.example.seoul.Group.Mycrewlist;
+package com.example.seoul.Group;
 
 public class GroupData {
     private String crewName;

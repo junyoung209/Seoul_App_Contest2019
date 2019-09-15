@@ -11,12 +11,11 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.seoul.Group.GroupData;
 import com.example.seoul.Group.Mycrewlist.CrewmainActivity;
-import com.example.seoul.Group.Mycrewlist.GroupData;
 import com.example.seoul.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GroupSurcrewlist_RvAdapter extends RecyclerView.Adapter<GroupSurcrewlist_RvAdapter.groupSurcrewlistViewHolder> {
 
@@ -51,7 +50,7 @@ public class GroupSurcrewlist_RvAdapter extends RecyclerView.Adapter<GroupSurcre
 
     @Override
     public int getItemCount() {
-        return this.items.size();
+        return items.size();
     }
 
 

@@ -11,13 +11,10 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.seoul.Group.GroupData;
 import com.example.seoul.R;
-import com.example.seoul.Single.Myrecord.MyrecordResult;
-import com.example.seoul.Single.Run.Runrecord;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Mycrewlist_RvAdapter extends RecyclerView.Adapter<Mycrewlist_RvAdapter.mycrewlistViewHolder> {
 
