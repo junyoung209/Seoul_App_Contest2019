@@ -1,6 +1,7 @@
 package com.example.seoul.Group.Mycrewlist;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,10 +17,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.example.seoul.R;
+import com.example.seoul.Single.Myrecord.Myrecord;
+import com.example.seoul.Single.Myrecord.MyrecordAdapter;
+import com.example.seoul.Single.Myrecord.RecordCallBack;
+import com.example.seoul.Single.Myrecord.RecordRequest;
 import com.example.seoul.Single.Run.SingleWorkoutActivity;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONObject;
+
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,12 +42,23 @@ public class MycrewlistFragment extends Fragment {
     private RecyclerView crewlist_rv, schedule_rv;
     private LinearLayoutManager llm_vertical, llm_horizontal;
 
+    private Mycrewlist_RvAdapter crewlist_adapter;
+    private Mycrewschedule_RvAdapter schedule_adapter;
+
     private List<Integer> count1, count2;
     private int i = 0;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private SwipeRefreshLayout refresh;
     private Button crew_create_text;
+
+    private ProgressDialog pdialog;
     private String userID;
-    private ArrayList<GroupData> groupData;
+    private String crewName;
+    private String crewRegion;
+    private String crewHost;
+    private String crewInfo;
+
+    private ArrayList<GroupData> groupData=new ArrayList<>();
+
 
     @SuppressLint("WrongConstant")
     @Nullable
@@ -43,6 +66,12 @@ public class MycrewlistFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_mylist, container,false);
+        pdialog=new ProgressDialog(getActivity());
+        pdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pdialog.setMessage("Loading");
+        pdialog.show();
+
+
         crewlist_rv = (RecyclerView) view.findViewById(R.id.crewlist_recyclerView);
         schedule_rv = (RecyclerView) view.findViewById(R.id.schedule_recyclerView);
         llm_vertical = new LinearLayoutManager(getActivity());
@@ -66,24 +95,37 @@ public class MycrewlistFragment extends Fragment {
         schedule_rv.setHasFixedSize(true);
         schedule_rv.setLayoutManager(llm_vertical);
 
+        refresh = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        getData(new GroupdataCallBack() {
+            @Override
+            public void onSuccess(ArrayList<GroupData> result) {
+                groupData=result;
+
+                crewlist_adapter = new Mycrewlist_RvAdapter(getActivity(), groupData);
+                crewlist_rv.setAdapter(crewlist_adapter);
+                crewlist_adapter.notifyDataSetChanged();
+
+                pdialog.dismiss();
+
+            }
+        });
+
+
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 i ++;
-                count1.add(i);
+
                 count2.add(i);
 
-                Mycrewlist_RvAdapter crewlist_adapter = new Mycrewlist_RvAdapter(getActivity(), count1, i);
-                crewlist_rv.setAdapter(crewlist_adapter);
-                Mycrewschedule_RvAdapter schedule_adapter = new Mycrewschedule_RvAdapter(getActivity(), count2, i);
+
+                schedule_adapter = new Mycrewschedule_RvAdapter(getActivity(), count2, i);
                 schedule_rv.setAdapter(schedule_adapter);
 
-                crewlist_adapter.notifyDataSetChanged();
                 schedule_adapter.notifyDataSetChanged();
 
-                mSwipeRefreshLayout.setRefreshing(false);
+                refresh.setRefreshing(false);
             }
         });
 
@@ -112,8 +154,74 @@ public class MycrewlistFragment extends Fragment {
         return view;
     }
 
+    public void getData(final GroupdataCallBack callback)
+    {
+
+        RequestQueue queue= Volley.newRequestQueue(getActivity().getApplicationContext());
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
 
 
+                try {
+
+                    JSONObject jsonObject=new JSONObject(response);
+
+                    boolean success=jsonObject.getBoolean("success");
+                    Log.i("log",response);
+                    if(success)
+                    {
+                        groupData.clear();
+                        int row=jsonObject.getInt("row");
+
+                        for(int i=0;i<row;i++)
+                        {
+                            String crewName;
+                            String crewRegion;
+                            String crewHost;
+                            String crewInfo;
+
+                            JSONObject json_temp=jsonObject.getJSONObject(Integer.toString(i));
+                            crewName=json_temp.getString("crewName");
+                            crewRegion=json_temp.getString("crewRegion");
+                            crewHost=json_temp.getString("crewHost");
+                            crewInfo=json_temp.getString("crewInfo");
+
+
+                            GroupData temp=new GroupData(crewName,crewRegion,crewHost,crewInfo);
+                            groupData.add(temp);
+                        }
+                        callback.onSuccess(groupData);
+
+                    }
+                    else {
+
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        MycrewlistRequest mycrewlistRequest=new MycrewlistRequest(userID,responseListener);
+        //getActivity().getApplicationContext()
+        queue.add(mycrewlistRequest);
+
+
+        return;
+    }
+
+    public void refreshData(){
+        getData(new GroupdataCallBack() {
+            @Override
+            public void onSuccess(ArrayList<GroupData> result) {
+                groupData=result;
+                crewlist_adapter.notifyDataSetChanged();
+
+            }
+        });
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
@@ -124,12 +232,21 @@ public class MycrewlistFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        refreshData();
         Log.i("log","grouplist:onstart");
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                refreshData();
+                refresh.setRefreshing(false);
+            }
+        });
         Log.i("log","grouplist:onresume");
     }
 
