@@ -3,6 +3,7 @@ package com.example.seoul.Group.Grouplist;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,9 +23,18 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.example.seoul.Group.Mycrewlist.CrewcreateActivity;
+import com.example.seoul.Group.Mycrewlist.GroupData;
+import com.example.seoul.Group.Mycrewlist.GroupdataCallBack;
+import com.example.seoul.Group.Mycrewlist.MycrewlistRequest;
+import com.example.seoul.Group.Mycrewlist.Mycrewlist_RvAdapter;
 import com.example.seoul.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,12 +48,26 @@ public class GrouplistFragment extends Fragment {
     private RecyclerView surcrewlist_rv, allcrewlist_rv;
     private LinearLayoutManager llm_vertical;
     private LinearLayoutManager llm_vertical1;
-    private List<Integer> count1, count2;
-    private int i = 0;
+
+
     TextView mTxtDate;
     int mYear, mMonth, mDay, mHour, mMinute;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+
+    private SwipeRefreshLayout refresh;
     Button crew_search_bnt;
+
+    private ProgressDialog pdialog;
+    private String userID,userRegion;
+
+
+
+    private GroupSurcrewlist_RvAdapter surcrewlist_adapter;
+    private GroupAllcrewlist_RvAdapter allcrewlist_adapter;
+
+
+    private ArrayList<GroupData> groupSurData=new ArrayList<>();
+    private ArrayList<GroupData> groupAllData=new ArrayList<>();
 
     @SuppressLint("WrongConstant")
     @Nullable
@@ -53,6 +77,22 @@ public class GrouplistFragment extends Fragment {
         surcrewlist_rv = (RecyclerView) view.findViewById(R.id.surcrewlist_recyclerView);
         allcrewlist_rv = (RecyclerView) view.findViewById(R.id.allcrewlist_recyclerView);
         mTxtDate = (TextView) view.findViewById(R.id.txtdate);
+
+
+        pdialog=new ProgressDialog(getActivity());
+        pdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pdialog.setMessage("Loading");
+        pdialog.show();
+
+
+        Bundle bundle=this.getArguments();
+        if(bundle!=null)
+        {
+            userID=bundle.getString("userID");
+            userRegion=bundle.getString("userRegion");
+            Log.i("log",userRegion);
+        }
+
 
         Calendar cal = new GregorianCalendar();
         mYear = cal.get(Calendar.YEAR);
@@ -64,12 +104,11 @@ public class GrouplistFragment extends Fragment {
         UpdateNow();
 
         llm_vertical = new LinearLayoutManager(getActivity());
-        llm_vertical.setOrientation(LinearLayoutManager.VERTICAL);
+        llm_vertical.setOrientation(LinearLayoutManager.HORIZONTAL);
         llm_vertical1 = new LinearLayoutManager(getActivity());
         llm_vertical1.setOrientation(LinearLayoutManager.VERTICAL);
 
-        count1 = new ArrayList<>();
-        count2 = new ArrayList<>();
+
 
         surcrewlist_rv.setHasFixedSize(true);
         surcrewlist_rv.setLayoutManager(llm_vertical);
@@ -77,25 +116,34 @@ public class GrouplistFragment extends Fragment {
         allcrewlist_rv.setLayoutManager(llm_vertical1);
 
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        refresh = (SwipeRefreshLayout) view.findViewById(R.id.grouplist_swipelayout);
+
+
+        getSurData(new GroupdataCallBack() {
             @Override
-            public void onRefresh() {
-                i++;
-                count1.add(i);
-                count2.add(i);
+            public void onSuccess(ArrayList<GroupData> result) {
+                groupSurData=result;
 
-                com.example.seoul.Group.Grouplist.GroupSurcrewlist_RvAdapter surcrewlist_adapter = new com.example.seoul.Group.Grouplist.GroupSurcrewlist_RvAdapter(getActivity(), count1, i);
+                surcrewlist_adapter = new GroupSurcrewlist_RvAdapter(getActivity(), groupSurData);
                 surcrewlist_rv.setAdapter(surcrewlist_adapter);
-                com.example.seoul.Group.Grouplist.GroupAllcrewlist_RvAdapter allcrewlist_adapter = new com.example.seoul.Group.Grouplist.GroupAllcrewlist_RvAdapter(getActivity(), count2, i);
-                allcrewlist_rv.setAdapter(allcrewlist_adapter);
-
                 surcrewlist_adapter.notifyDataSetChanged();
-                allcrewlist_adapter.notifyDataSetChanged();
 
-                mSwipeRefreshLayout.setRefreshing(false);
+
             }
         });
+        getAllData(new GroupdataCallBack() {
+            @Override
+            public void onSuccess(ArrayList<GroupData> result) {
+                groupAllData=result;
+
+                allcrewlist_adapter = new GroupAllcrewlist_RvAdapter(getActivity(),groupAllData);
+                allcrewlist_rv.setAdapter(allcrewlist_adapter);
+                allcrewlist_adapter.notifyDataSetChanged();
+
+                pdialog.dismiss();
+            }
+        });
+
         crew_search_bnt = (Button) view.findViewById(R.id.SearchButton);
         crew_search_bnt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +182,148 @@ public class GrouplistFragment extends Fragment {
                 }
             };
 
+    public void getSurData(final GroupdataCallBack callback)
+    {
+
+        RequestQueue queue= Volley.newRequestQueue(getActivity().getApplicationContext());
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+                try {
+
+                    JSONObject jsonObject=new JSONObject(response);
+
+                    boolean success=jsonObject.getBoolean("success");
+                    Log.i("log",response);
+                    if(success)
+                    {
+                        groupSurData.clear();
+                        int row=jsonObject.getInt("row");
+
+                        for(int i=0;i<row;i++)
+                        {
+                            String crewName;
+                            String crewRegion;
+                            String crewHost;
+                            String crewInfo;
+
+                            JSONObject json_temp=jsonObject.getJSONObject(Integer.toString(i));
+                            crewName=json_temp.getString("crewName");
+                            crewRegion=json_temp.getString("crewRegion");
+                            crewHost=json_temp.getString("crewHost");
+                            crewInfo=json_temp.getString("crewInfo");
+
+
+                            GroupData temp=new GroupData(crewName,crewRegion,crewHost,crewInfo);
+                            groupSurData.add(temp);
+                        }
+                        callback.onSuccess(groupSurData);
+
+                    }
+                    else {
+
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+
+        GroupSurcrewlistRequest groupSurcrewlistRequest=new GroupSurcrewlistRequest(userID,userRegion,responseListener);
+        //getActivity().getApplicationContext()
+        queue.add(groupSurcrewlistRequest);
+
+
+        return;
+    }
+
+
+    public void getAllData(final GroupdataCallBack callback) {
+
+        RequestQueue queue= Volley.newRequestQueue(getActivity().getApplicationContext());
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+
+                    JSONObject jsonObject=new JSONObject(response);
+
+                    boolean success=jsonObject.getBoolean("success");
+                    Log.i("log",response);
+                    if(success)
+                    {
+                        groupAllData.clear();
+                        int row=jsonObject.getInt("row");
+
+                        for(int i=0;i<row;i++)
+                        {
+                            String crewName;
+                            String crewRegion;
+                            String crewHost;
+                            String crewInfo;
+
+                            JSONObject json_temp=jsonObject.getJSONObject(Integer.toString(i));
+                            crewName=json_temp.getString("crewName");
+                            crewRegion=json_temp.getString("crewRegion");
+                            crewHost=json_temp.getString("crewHost");
+                            crewInfo=json_temp.getString("crewInfo");
+
+
+                            GroupData temp=new GroupData(crewName,crewRegion,crewHost,crewInfo);
+                            groupSurData.add(temp);
+                        }
+                        callback.onSuccess(groupSurData);
+
+                    }
+                    else {
+
+                    }
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+
+        GroupAllcrewlistRequest groupAllcrewlistRequest=new GroupAllcrewlistRequest(responseListener);
+        //getActivity().getApplicationContext()
+        queue.add(groupAllcrewlistRequest);
+
+
+        return;
+    }
+
+
+    public void refreshData(){
+        getSurData(new GroupdataCallBack() {
+            @Override
+            public void onSuccess(ArrayList<GroupData> result) {
+                groupSurData=result;
+                if(surcrewlist_adapter!=null)
+                {
+                    surcrewlist_adapter.notifyDataSetChanged();
+                }
+
+            }
+        });
+        getAllData(new GroupdataCallBack() {
+            @Override
+            public void onSuccess(ArrayList<GroupData> result) {
+                groupAllData=result;
+                if(allcrewlist_adapter!=null)
+                {
+                    allcrewlist_adapter.notifyDataSetChanged();
+                }
+
+            }
+        });
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -148,7 +338,15 @@ public class GrouplistFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.i("log", "grouplist:onresume");
+        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                refreshData();
+                refresh.setRefreshing(false);
+            }
+        });
+        Log.i("log","grouplist:onresume");
     }
 
     @Override

@@ -13,7 +13,7 @@ public class MypageActivity extends AppCompatActivity {
 
 
     private ImageButton bt_img1, bt_img2,bt_img3,bt_img4;
-    private String userID;
+    private String userID,userRegion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +22,7 @@ public class MypageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mypage);
 
         userID= getIntent().getStringExtra("userID");
+        userRegion=getIntent().getStringExtra("userRegion");
         // 위젯에 대한 참조
         bt_img1 = (ImageButton)findViewById(R.id.imgbt1);
         bt_img2 = (ImageButton)findViewById(R.id.imgbt2);
@@ -38,6 +39,7 @@ public class MypageActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 
                 intent.putExtra("userID",userID);
+                intent.putExtra("userRegion",userRegion);
                 MypageActivity.this.startActivity(intent);
             }
         });
@@ -48,6 +50,7 @@ public class MypageActivity extends AppCompatActivity {
                 Intent intent=new Intent(MypageActivity.this,GroupActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra("userID",userID);
+                intent.putExtra("userRegion",userRegion);
                 MypageActivity.this.startActivity(intent);
             }
         });
@@ -59,6 +62,7 @@ public class MypageActivity extends AppCompatActivity {
                 Intent intent=new Intent(MypageActivity.this,ApiActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra("userID",userID);
+                intent.putExtra("userRegion",userRegion);
                 MypageActivity.this.startActivity(intent);
             }
         });

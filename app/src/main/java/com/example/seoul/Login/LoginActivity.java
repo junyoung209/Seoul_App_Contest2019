@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                                 save();
                                 Intent intent = new Intent(LoginActivity.this, SingleActivity.class);
                                 intent.putExtra("userID", userID); //액티비티 전환하면서 id넘겨
+                                intent.putExtra("userRegion",jsonResponse.getString("userRegion"));
                                 LoginActivity.this.startActivity(intent);
                                 finish();
                             } else {

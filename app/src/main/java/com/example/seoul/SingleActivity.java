@@ -20,7 +20,7 @@ public class SingleActivity extends AppCompatActivity {
     private ImageButton bt_img1, bt_img2,bt_img3,bt_img4;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private String userID;
+    private String userID,userRegion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class SingleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_single);
 
         userID= getIntent().getStringExtra("userID");
-
+        userRegion=getIntent().getStringExtra("userRegion");
 
         RunFragment tab1 = new RunFragment();
         RunguideFragment tab2 = new RunguideFragment();
@@ -38,6 +38,7 @@ public class SingleActivity extends AppCompatActivity {
 
         Bundle bundle=new Bundle();
         bundle.putString("userID",userID);
+        bundle.putString("userRegion",userRegion);
         tab1.setArguments(bundle);
         tab2.setArguments(bundle);
         tab3.setArguments(bundle);
@@ -98,6 +99,7 @@ public class SingleActivity extends AppCompatActivity {
                 Intent intent=new Intent(SingleActivity.this,GroupActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra("userID",userID);
+                intent.putExtra("userRegion",userRegion);
                 SingleActivity.this.startActivity(intent);
             }
         });
@@ -108,6 +110,7 @@ public class SingleActivity extends AppCompatActivity {
                 Intent intent=new Intent(SingleActivity.this,MypageActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra("userID",userID);
+                intent.putExtra("userRegion",userRegion);
                 SingleActivity.this.startActivity(intent);
             }
         });
@@ -118,6 +121,7 @@ public class SingleActivity extends AppCompatActivity {
                 Intent intent=new Intent(SingleActivity.this,ApiActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra("userID",userID);
+                intent.putExtra("userRegion",userRegion);
                 SingleActivity.this.startActivity(intent);
             }
         });

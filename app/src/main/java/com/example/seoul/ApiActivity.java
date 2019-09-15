@@ -75,7 +75,7 @@ public class ApiActivity extends AppCompatActivity
     private LocationRequest locationRequest;
     private Location location;
     private boolean aedState = false;
-    private String userID;
+    private String userID,userRegion;
     private View mLayout;
 
     @Override
@@ -86,6 +86,7 @@ public class ApiActivity extends AppCompatActivity
 
         mLayout = findViewById(R.id.layout_api);
         userID= getIntent().getStringExtra("userID");
+        userRegion=getIntent().getStringExtra("userRegion");
         // 위젯에 대한 참조
         bt_img1 = (ImageButton)findViewById(R.id.imgbt1);
         bt_img2 = (ImageButton)findViewById(R.id.imgbt2);
@@ -101,6 +102,7 @@ public class ApiActivity extends AppCompatActivity
                 Intent intent=new Intent(ApiActivity.this,SingleActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra("userID",userID);
+                intent.putExtra("userRegion",userRegion);
                 ApiActivity.this.startActivity(intent);
             }
         });
@@ -111,6 +113,7 @@ public class ApiActivity extends AppCompatActivity
                 Intent intent=new Intent(ApiActivity.this,GroupActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra("userID",userID);
+                intent.putExtra("userRegion",userRegion);
                 ApiActivity.this.startActivity(intent);
             }
         });
@@ -121,6 +124,7 @@ public class ApiActivity extends AppCompatActivity
                 Intent intent=new Intent(ApiActivity.this,MypageActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.putExtra("userID",userID);
+                intent.putExtra("userRegion",userRegion);
                 ApiActivity.this.startActivity(intent);
             }
         });

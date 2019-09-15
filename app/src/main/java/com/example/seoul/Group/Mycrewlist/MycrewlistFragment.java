@@ -95,7 +95,7 @@ public class MycrewlistFragment extends Fragment {
         schedule_rv.setHasFixedSize(true);
         schedule_rv.setLayoutManager(llm_vertical);
 
-        refresh = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);
+        refresh = (SwipeRefreshLayout) view.findViewById(R.id.mylist_swipe_layout);
 
         getData(new GroupdataCallBack() {
             @Override

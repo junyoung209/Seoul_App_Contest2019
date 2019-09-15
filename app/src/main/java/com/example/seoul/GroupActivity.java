@@ -19,7 +19,7 @@ public class GroupActivity extends AppCompatActivity {
     private ImageButton bt_img1, bt_img2,bt_img3,bt_img4;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private String userID;
+    private String userID,userRegion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +31,10 @@ public class GroupActivity extends AppCompatActivity {
         MycrewlistFragment tab2 = new MycrewlistFragment();
 
         userID= getIntent().getStringExtra("userID");
-
+        userRegion=getIntent().getStringExtra("userRegion");
         Bundle bundle=new Bundle();
         bundle.putString("userID",userID);
+        bundle.putString("userRegion",userRegion);
         tab1.setArguments(bundle);
         tab2.setArguments(bundle);
 
