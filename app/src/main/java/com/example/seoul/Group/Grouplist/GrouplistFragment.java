@@ -36,8 +36,8 @@ public class GrouplistFragment extends Fragment {
 
 
     private RecyclerView surcrewlist_rv, allcrewlist_rv;
+    private LinearLayoutManager llm_horizontal;
     private LinearLayoutManager llm_vertical;
-    private LinearLayoutManager llm_vertical1;
     private List<Integer> count1, count2;
     private int i = 0;
     TextView mTxtDate;
@@ -63,18 +63,18 @@ public class GrouplistFragment extends Fragment {
 
         UpdateNow();
 
+        llm_horizontal = new LinearLayoutManager(getActivity());
+        llm_horizontal.setOrientation(LinearLayoutManager.HORIZONTAL);
         llm_vertical = new LinearLayoutManager(getActivity());
         llm_vertical.setOrientation(LinearLayoutManager.VERTICAL);
-        llm_vertical1 = new LinearLayoutManager(getActivity());
-        llm_vertical1.setOrientation(LinearLayoutManager.VERTICAL);
 
         count1 = new ArrayList<>();
         count2 = new ArrayList<>();
 
         surcrewlist_rv.setHasFixedSize(true);
-        surcrewlist_rv.setLayoutManager(llm_vertical);
+        surcrewlist_rv.setLayoutManager(llm_horizontal);
         allcrewlist_rv.setHasFixedSize(true);
-        allcrewlist_rv.setLayoutManager(llm_vertical1);
+        allcrewlist_rv.setLayoutManager(llm_vertical);
 
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_layout);

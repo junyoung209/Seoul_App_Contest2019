@@ -98,17 +98,6 @@ public class MycrewlistFragment extends Fragment {
             }
         });
 
-
-
-
-//        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getActivity(), CrewcreateActivity.class);
-//                startActivity(intent);
-//            }
-//        });
         return view;
     }
 
