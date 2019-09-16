@@ -39,13 +39,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
 
-            <TextView
-                android:id="@+id/txtdate"
+            <EditText
+                android:id="@+id/EditTextDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:onClick="mOnClick"
-                android:textSize="20sp" />
+                android:gravity="center"
+                android:hint="날짜를 입력해주세요"
+                android:background="@null"
+                />
 
             <Spinner
                 android:id="@+id/locationSpinner"

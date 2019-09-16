@@ -5,9 +5,11 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,8 +21,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
@@ -45,6 +49,7 @@ public class GrouplistFragment extends Fragment {
 
 
     TextView mTxtDate;
+    EditText editText;
     int mYear, mMonth, mDay, mHour, mMinute;
 
 
@@ -63,6 +68,7 @@ public class GrouplistFragment extends Fragment {
     private ArrayList<GroupData> groupSurData=new ArrayList<>();
     private ArrayList<GroupData> groupAllData=new ArrayList<>();
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("WrongConstant")
     @Nullable
     @Override
@@ -70,9 +76,9 @@ public class GrouplistFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_grouplist, container, false);
         surcrewlist_rv = (RecyclerView) view.findViewById(R.id.surcrewlist_recyclerView);
         allcrewlist_rv = (RecyclerView) view.findViewById(R.id.allcrewlist_recyclerView);
-        mTxtDate = (TextView) view.findViewById(R.id.txtdate);
         location=(TextView)view.findViewById(R.id.grouplist_userlocation);
 
+        editText = (EditText)view.findViewById(R.id.EditTextDate);
 
         pdialog=new ProgressDialog(getActivity());
         pdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -96,7 +102,6 @@ public class GrouplistFragment extends Fragment {
         mHour = cal.get(Calendar.HOUR_OF_DAY);
         mMinute = cal.get(Calendar.MINUTE);
 
-        UpdateNow();
 
         llm_vertical = new LinearLayoutManager(getActivity());
         llm_vertical.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -109,6 +114,21 @@ public class GrouplistFragment extends Fragment {
         surcrewlist_rv.setLayoutManager(llm_vertical);
         allcrewlist_rv.setHasFixedSize(false);
         allcrewlist_rv.setLayoutManager(llm_vertical1);
+
+
+        editText = (EditText)view.findViewById(R.id.EditTextDate);
+        editText.setCursorVisible(false);
+        editText.setShowSoftInputOnFocus(false);
+        editText.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                DatePickerFragment dpf = new DatePickerFragment(editText);
+                dpf.show(getFragmentManager(), "datePicker");
+
+            }
+
+        });
 
 
         refresh = (SwipeRefreshLayout) view.findViewById(R.id.grouplist_swipelayout);
@@ -152,29 +172,7 @@ public class GrouplistFragment extends Fragment {
         return view;
     }
 
-    void UpdateNow() {
-        mTxtDate.setText(String.format("%d년 %d월 %d일", mYear, mMonth + 1, mDay));
-    }
 
-    public void mOnClick(View v) {
-        new DatePickerDialog(getActivity(), AlertDialog.THEME_HOLO_LIGHT, mDateSetListener, mYear, mMonth, mDay).show();
-    }
-
-    //날짜 대화상자 리스너 부분
-    DatePickerDialog.OnDateSetListener mDateSetListener =
-            new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                      int dayOfMonth) {
-                    // TODO Auto-generated method stub
-                    //사용자가 입력한 값을 가져온뒤
-                    mYear = year;
-                    mMonth = monthOfYear;
-                    mDay = dayOfMonth;
-                    //텍스트뷰의 값을 업데이트함
-                    UpdateNow();
-                }
-            };
 
     public void getSurData(final GroupdataCallBack callback)
     {
@@ -286,7 +284,7 @@ public class GrouplistFragment extends Fragment {
 
         GroupAllcrewlistRequest groupAllcrewlistRequest=new GroupAllcrewlistRequest(responseListener);
         //getActivity().getApplicationContext()
-        queue.add(groupAllcrewlistRequest);
+        queue.add(groupAllcrewlistRequest)
 
 
         return;
