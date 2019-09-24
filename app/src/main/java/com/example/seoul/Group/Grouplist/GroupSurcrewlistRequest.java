@@ -17,8 +17,6 @@ public class GroupSurcrewlistRequest extends StringRequest {
         parameters = new HashMap<>();
         parameters.put("userID",userID);
         parameters.put("userRegion",userRegion);
-
-
     }
     @Override
     protected Map<String, String> getParams() throws AuthFailureError {

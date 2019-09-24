@@ -11,7 +11,6 @@ public class GroupAllcrewlistRequest extends StringRequest {
 
     public GroupAllcrewlistRequest(Response.Listener<String> listener){
         super(Method.POST,URL,listener,null);
-
     }
 
 }
