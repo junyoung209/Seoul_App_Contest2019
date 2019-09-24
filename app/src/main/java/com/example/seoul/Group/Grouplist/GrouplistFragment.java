@@ -284,7 +284,7 @@ public class GrouplistFragment extends Fragment {
 
         GroupAllcrewlistRequest groupAllcrewlistRequest=new GroupAllcrewlistRequest(responseListener);
         //getActivity().getApplicationContext()
-        queue.add(groupAllcrewlistRequest)
+        queue.add(groupAllcrewlistRequest);
 
 
         return;
