@@ -6,11 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GroupActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#ffffff">
+        android:background="#ffffff"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,6 +51,7 @@
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,12 +77,14 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/timeimage"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentLeft="true"
                 android:src="@drawable/run" />
+
             <TextView
                 android:id="@+id/time1"
                 android:layout_width="match_parent"
@@ -91,38 +95,43 @@
                 android:textColor="#000000"
                 android:textSize="12dp"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/time2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/timeimage"
                 android:layout_below="@+id/time1"
+                android:layout_toRightOf="@+id/timeimage"
                 android:background="#ffffff"
                 android:text="오후 3:00 - 오후 6:00"
                 android:textColor="#000000"
                 android:textSize="12dp"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/time3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/timeimage"
                 android:layout_below="@+id/time2"
+                android:layout_toRightOf="@+id/timeimage"
                 android:background="#ffffff"
                 android:text="매주 토요일"
                 android:textColor="#000000"
                 android:textSize="12dp"
                 android:textStyle="bold" />
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/placeimage"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentLeft="true"
                 android:src="@drawable/run" />
+
             <TextView
                 android:id="@+id/place1"
                 android:layout_width="match_parent"
@@ -133,38 +142,43 @@
                 android:textColor="#000000"
                 android:textSize="12dp"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/place2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/placeimage"
                 android:layout_below="@+id/place1"
+                android:layout_toRightOf="@+id/placeimage"
                 android:background="#ffffff"
                 android:text="서울시 반포대교"
                 android:textColor="#000000"
                 android:textSize="12dp"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/place3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/placeimage"
                 android:layout_below="@+id/place2"
+                android:layout_toRightOf="@+id/placeimage"
                 android:background="#ffffff"
                 android:text="매주 토요일"
                 android:textColor="#000000"
                 android:textSize="12dp"
                 android:textStyle="bold" />
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/hostimage"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_alignParentLeft="true"
                 android:src="@drawable/run" />
+
             <TextView
                 android:id="@+id/host"
                 android:layout_width="match_parent"
@@ -175,6 +189,21 @@
                 android:textColor="#000000"
                 android:textSize="20dp"
                 android:textStyle="bold" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="#008000"
+                android:clickable="true"
+                android:visibility="invisible"
+                android:src="@drawable/ic_add_24dp"
+                app:borderWidth="0dp"
+                app:fabSize="normal" />
         </RelativeLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

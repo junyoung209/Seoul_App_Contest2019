@@ -47,7 +47,6 @@ public class GrouplistFragment extends Fragment {
     private LinearLayoutManager llm_vertical;
     private LinearLayoutManager llm_vertical1;
 
-
     TextView mTxtDate;
     EditText editText;
     int mYear, mMonth, mDay, mHour, mMinute;
